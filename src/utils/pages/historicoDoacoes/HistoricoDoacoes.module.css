@@ -1,0 +1,169 @@
+.kpi__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 50px;
+    
+    margin-top: 50px;
+    padding-top: 50px;
+
+    width: 100%;
+
+}
+
+.relatorio__container{
+    background-color: #fff;
+
+    border: 1px solid #ECECEC;
+
+    width: 90%;
+
+    margin-top: 16px;
+
+    border-radius: 5px;
+
+    padding: 16px;
+    padding-left: 32px;
+    padding-right: 32px;
+
+    box-shadow: 0px 0px 5px 0px #C8CBD9;
+
+}
+
+.relatorio__container h1{
+    font-size: 20px;
+    font-weight: 500px;
+}
+
+.filtro__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+}
+
+.filtro__container .form__filtros {
+    display: flex;
+    align-items: center;
+    
+    gap: 16px;
+
+}
+
+.form__filtros label {
+    font-size: 12px;
+
+    margin-right: 5px;
+}
+
+.form__filtros input, select {
+    border: 1px solid #C1C1C1;
+
+    border-radius: 5px;
+
+    padding: 8px;
+}
+
+.form__filtros button{
+    background-color: #008816;
+    color: #fff;
+
+    border: none;
+    border-radius: 5px;
+
+    cursor: pointer;
+
+    padding: 8px;
+}
+
+.form__filtros button:hover{
+    background-color: #005D0B;
+}
+
+.legenda {
+    font-size: 12px;
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    cursor: pointer;
+}
+
+.legenda-field {
+    padding: 8px;
+    
+    display: none;
+    flex-direction: column;
+
+    height: 0px;
+    width: 130px;
+
+    transition: height var(--animation-time);
+
+    border: 1px solid #ECECEC;
+    box-shadow: 0px 0px 5px 0px #C8CBD9;
+
+    background-color: #fff;
+
+    position: absolute;
+    top: 100%;
+    left: 0;
+
+    z-index: 1;
+}
+
+.legenda-field div {
+    display: flex;
+    align-items: center;
+}
+
+.legenda:hover .legenda-field {
+    display: flex;
+    height: auto;
+}
+
+.circle {
+    width: 13px;
+    height: 13px;
+
+    border-radius: 50%;
+
+    margin-right: 5px;
+
+}
+
+.circle.red{
+    background-color: #DF7F7F;
+}
+
+.circle.yellow{
+    background-color: #EFCC97;
+}
+
+.circle.green{
+    background-color: #82B770;
+}
+
+.tabela {
+    width: 100%;
+    margin-top: 16px;
+
+    text-align: left;
+}
+
+.tabela th {
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.tabela .circle {
+    width: 20px;
+    height: 20px;
+}
+
+.download {
+    cursor: pointer;
+}

@@ -1,0 +1,49 @@
+.box-counter {
+  display: inline-block;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 11px;
+  border: 1px solid #ECECEC;
+  border-radius: 8px;
+  background-color: #fff;
+  
+  box-shadow: 0px 0px 5px 0px #C8CBD9;
+
+  max-width: 277px;
+  min-width: 20%;
+}
+
+.title {
+  font-size: 0.8vw;
+  color: #8C8B8B;
+  margin: 0;
+}
+
+.count {
+  font-size: 40px;
+  font-weight: 600;
+
+  color: #000;
+}
+
+.comparison {
+  font-size: 0.7vw;
+  font-weight: 300;
+  color: #8C8B8B;
+  margin: 0;
+}
+
+.percentage {
+  margin-left: 5px;
+}
+
+.arrow-up {
+  color: #008816;
+  font-size: 20px;
+}
+
+.arrow-down {
+  color: #F00000;
+  font-size: 20px;
+
+}

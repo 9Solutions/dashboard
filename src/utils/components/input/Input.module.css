@@ -1,0 +1,35 @@
+.input__container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  width: 100%;
+}
+
+.input__container label{
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.input__container input {
+  width: 100%;
+
+  padding: 0.5rem;
+
+  border: 1px solid #C1C1C1;
+
+  font-size: 1rem;
+}
+
+.input__password{
+  position: relative;
+}
+
+.input__password span{
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  cursor: pointer;
+}
