@@ -8,12 +8,15 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.2",
     "bootstrap-icons": "^1.11.3",
+    "handlebars": "^4.7.8",
+    "puppeteer": "^22.10.0",
+    "puppeteer-html-pdf": "^4.0.8",
     "react": "^18.3.1",
     "react-bootstrap-icons": "^1.11.4",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
-    "react-toastify": "^10.0.5",
+    "react-toastify": "^9.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

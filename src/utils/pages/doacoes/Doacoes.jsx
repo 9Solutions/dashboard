@@ -2,7 +2,7 @@ import React from "react";
 
 import LeftBar from "../../components/leftBar/LeftBar";
 
-const HistoricoDoacoes = () => {
+const Doacoes = () => {
     return (
         <div>
             <LeftBar />
@@ -11,4 +11,4 @@ const HistoricoDoacoes = () => {
     )
 }
 
-export default HistoricoDoacoes;
+export default Doacoes;

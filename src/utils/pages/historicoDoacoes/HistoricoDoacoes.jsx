@@ -4,7 +4,8 @@ import LeftBar from "../../components/leftBar/LeftBar";
 import Navbar from "../../components/navbar/Navbar";
 import KPI from "../../components/kpi/KPI";
 import { useState, useEffect } from "react";
-import { getAllDoacoes } from "../../services/doacoesService";
+import { getAllDoacoes } from "../../backend/methods";
+import { tranformDate, tranformPhone } from "../../globals";
 
 const HistoricoDoacoes = () => {
     const [ doacoes, setDoacoes ] = useState([]);
@@ -78,10 +79,10 @@ const HistoricoDoacoes = () => {
                                 <tr key={index}>
                                     <td>{doacao.id}</td>
                                     <td>{doacao.doador.nome}</td>
-                                    <td>{doacao.doador.telefone}</td>
-                                    <td>{doacao.status}</td>
-                                    <td>{doacao.dataDoacao}</td>
-                                    <td>{doacao.valor}</td>
+                                    <td>{tranformPhone(doacao.doador.telefone)}</td>
+                                    <td>{doacao.statusPedido.status}</td>
+                                    <td>{tranformDate(doacao.dataPedido)}</td>
+                                    <td>{doacao.valorTotal}</td>
                                     <td><div className={`${styles["circle"]} ${styles["red"]}`}></div></td>
                                     <td><span class={`material-symbols-rounded ${styles["download"]}`}>
                                         download
