@@ -22,3 +22,7 @@ export const logout = () => {
 export const getAllDoacoes = async () => {
     return api.get(`/pedidos`);
 }
+
+export const getDoacaoFiltro = async (status, data, idPedido) => {
+    return api.get(`/pedidos/filter`, { params: { status, data, idPedido } });
+}

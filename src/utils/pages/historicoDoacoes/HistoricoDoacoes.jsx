@@ -4,19 +4,35 @@ import LeftBar from "../../components/leftBar/LeftBar";
 import Navbar from "../../components/navbar/Navbar";
 import KPI from "../../components/kpi/KPI";
 import { useState, useEffect } from "react";
-import { getAllDoacoes } from "../../backend/methods";
+import { getAllDoacoes, getDoacaoFiltro } from "../../backend/methods";
 import { tranformDate, tranformPhone } from "../../globals";
+import { useSearchParams } from "react-router-dom";
 
 const HistoricoDoacoes = () => {
-    const [ doacoes, setDoacoes ] = useState([]);
+    const [searchParams] = useSearchParams();
+
+    const [doacoes, setDoacoes] = useState([]);
+    const data = searchParams.get('data');
+    const status = searchParams.get('status');
+    const idDoacao = searchParams.get('idDoacao');
+
+    const isSelected = (value) => status === value;
 
     useEffect(() => {
-        getAllDoacoes().then((response) => {
-            setDoacoes(response.data);
-        }).catch((error) => {
-            console.error("Erro ao buscar as doações: ", error);
-        })
-    }, []);
+        if (searchParams.size === 3) {
+            getDoacaoFiltro(status, data, idDoacao).then((response) => {
+                setDoacoes(response.data);
+            }).catch((error) => {
+                console.error("Erro ao buscar as doações: ", error);
+            })
+        } else {
+            getAllDoacoes().then((response) => {
+                setDoacoes(response.data);
+            }).catch((error) => {
+                console.error("Erro ao buscar as doações: ", error);
+            })
+        }
+    }, [data, status, idDoacao, searchParams.size]);
 
     return (
         <div style={{ display: "flex", alignItems: 'center', flexDirection: "column" }}>
@@ -31,18 +47,18 @@ const HistoricoDoacoes = () => {
             <div className={styles["relatorio__container"]}>
                 <h1>Lista de Doações</h1>
                 <div className={styles["filtro__container"]}>
-                    <form className={styles["form__filtros"]}>
+                    <form className={styles["form__filtros"]} method="GET">
                         <div><label>Nº do Pedido</label>
-                            <input type="text" placeholder="000000" /></div>
+                            <input type="text" placeholder="000000" name="idDoacao" defaultValue={idDoacao} /></div>
                         <div><label>Data Doação</label>
-                            <input type="date" /></div>
+                            <input type="date" name="data" defaultValue={data} /></div>
                         <div><label>Status</label>
-                            <select>
-                                <option value="todos" disabled>Todos</option>
-                                <option value="novo">Novo</option>
-                                <option value="montagem">Em Montagem</option>
-                                <option value="entregue">Em Entrega</option>
-                                <option value="finalizado">Finalizado</option>
+                            <select name="status">
+                                <option value="" selected={isSelected("")}>Todos</option>
+                                <option value="novo" selected={isSelected("novo")}>Novo</option>
+                                <option value="montagem" selected={isSelected("montagem")}>Em Montagem</option>
+                                <option value="entregue" selected={isSelected("entregue")}>Em Entrega</option>
+                                <option value="finalizado" selected={isSelected("finalizado")}>Finalizado</option>
                             </select>
                         </div>
 
@@ -74,7 +90,7 @@ const HistoricoDoacoes = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {
+                        {(doacoes.length === 0) ? <tr><td colSpan="8">Nenhuma doação encontrada</td></tr> :
                             doacoes.map((doacao, index) => (
                                 <tr key={index}>
                                     <td>{doacao.id}</td>
