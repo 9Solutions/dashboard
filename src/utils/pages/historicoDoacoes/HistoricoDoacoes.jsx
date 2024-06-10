@@ -4,9 +4,19 @@ import LeftBar from "../../components/leftBar/LeftBar";
 import Navbar from "../../components/navbar/Navbar";
 import KPI from "../../components/kpi/KPI";
 import { useState, useEffect } from "react";
-import { getAllDoacoes, getDoacaoFiltro } from "../../backend/methods";
+import { getAllDoacoes, getDoacaoFiltro, getAllDoacoesDetalhadas } from "../../backend/methods";
 import { tranformDate, tranformPhone } from "../../globals";
 import { useSearchParams } from "react-router-dom";
+import GenerateMatriz from "../../generateMatriz";
+
+const getMatriz = async () => {
+    getAllDoacoesDetalhadas().then((response) => {
+        var matriz = GenerateMatriz(response.data);
+
+        localStorage.setItem("grafico_para_monitoramento_de_atrasos", JSON.stringify(matriz));
+    })
+}
+    
 
 const HistoricoDoacoes = () => {
     const [searchParams] = useSearchParams();
@@ -19,6 +29,8 @@ const HistoricoDoacoes = () => {
     const isSelected = (value) => status === value;
 
     useEffect(() => {
+        getMatriz();
+
         if (searchParams.size === 3) {
             getDoacaoFiltro(status, data, idDoacao).then((response) => {
                 setDoacoes(response.data);

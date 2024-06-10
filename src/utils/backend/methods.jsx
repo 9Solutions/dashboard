@@ -26,3 +26,7 @@ export const getAllDoacoes = async () => {
 export const getDoacaoFiltro = async (status, data, idPedido) => {
     return api.get(`/pedidos/filter`, { params: { status, data, idPedido } });
 }
+
+export const getAllDoacoesDetalhadas = async () => {
+    return api.get(`/pedidos/all-details`);
+}
