@@ -30,3 +30,15 @@ export const getDoacaoFiltro = async (status, data, idPedido) => {
 export const getAllDoacoesDetalhadas = async () => {
     return api.get(`/pedidos/all-details`);
 }
+
+export const getCaixasEntregar = async () => {
+    return api.get(`/vw-caixas-para-entregar`);
+}
+
+export const getCaixasMontar = async () => {
+    return api.get(`/vw-caixas-em-montagem`);
+}
+
+export const getCaixasAtrasadas = async () => {
+    return api.get(`/vw-caixas-atrasadas`);
+}

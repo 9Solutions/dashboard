@@ -4,7 +4,7 @@ import LeftBar from "../../components/leftBar/LeftBar";
 import Navbar from "../../components/navbar/Navbar";
 import KPI from "../../components/kpi/KPI";
 import { useState, useEffect } from "react";
-import { getAllDoacoes, getDoacaoFiltro, getAllDoacoesDetalhadas } from "../../backend/methods";
+import { getAllDoacoes, getDoacaoFiltro, getAllDoacoesDetalhadas, getCaixasEntregar, getCaixasAtrasadas, getCaixasMontar } from "../../backend/methods";
 import { tranformDate, tranformPhone } from "../../globals";
 import { useSearchParams } from "react-router-dom";
 import GenerateMatriz from "../../generateMatriz";
@@ -22,15 +22,18 @@ const HistoricoDoacoes = () => {
     const [searchParams] = useSearchParams();
 
     const [doacoes, setDoacoes] = useState([]);
+    const [qtdEntrega, setQtdEntrega] = useState([]);
+    const [qtdAtrasadas, setQtdAtrasadas] = useState([]);
+    const [qtdMontar, setQtdMontar] = useState([]);
+
     const data = searchParams.get('data');
     const status = searchParams.get('status');
     const idDoacao = searchParams.get('idDoacao');
 
     const isSelected = (value) => status === value;
 
-    useEffect(() => {
-        getMatriz();
 
+    const loadDoacoes = () => {
         if (searchParams.size === 3) {
             getDoacaoFiltro(status, data, idDoacao).then((response) => {
                 setDoacoes(response.data);
@@ -44,6 +47,47 @@ const HistoricoDoacoes = () => {
                 console.error("Erro ao buscar as doações: ", error);
             })
         }
+    }
+
+    const loadQtdEntrega = () => {
+        getCaixasEntregar().then((response) => {
+            setQtdEntrega(response.data[0].qtdCaixasParaEntregar);
+        }
+        ).catch((error) => {
+            console.error("Erro ao buscar as caixas para entrega: ", error);
+        })
+    }
+
+    const loadQtdMontar = () => {
+        getCaixasMontar().then((response) => {
+            setQtdMontar(response.data[0].qtdCaixasEmMontagem);
+        }
+        ).catch((error) => {
+            console.error("Erro ao buscar as caixas para montar: ", error);
+        })
+    }
+
+    const loadQtdAtrasadas = () => {
+        getCaixasAtrasadas().then((response) => {
+            setQtdAtrasadas(response.data[0].qtdCaixasAtrasadas);
+        }
+        ).catch((error) => {
+            console.error("Erro ao buscar as caixas atrasadas: ", error);
+        })
+    }
+
+
+    useEffect(() => {
+        getMatriz();
+
+        loadDoacoes();
+
+        loadQtdEntrega();
+
+        loadQtdMontar();
+
+        loadQtdAtrasadas();
+
     }, [data, status, idDoacao, searchParams.size]);
 
     return (
@@ -51,9 +95,9 @@ const HistoricoDoacoes = () => {
             <LeftBar />
             <Navbar page_title="Histórico de Doações" />
             <div className={styles["kpi__container"]}>
-                <KPI title="Caixas que precisam ser feitas" count="100" comparison="10" isIncrease={true} />
-                <KPI title="Caixas prontas para entrega" count="10" comparison="10" isIncrease={false} />
-                <KPI title="Caixas atrasadas" count="10" comparison="10" isIncrease={false} />
+                <KPI title="Caixas que precisam ser feitas" count={qtdMontar} comparison="10" isIncrease={true} />
+                <KPI title="Caixas prontas para entrega" count={qtdEntrega} comparison="10" isIncrease={false} />
+                <KPI title="Caixas atrasadas" count={qtdAtrasadas} comparison="10" isIncrease={false} />
             </div>
 
             <div className={styles["relatorio__container"]}>
