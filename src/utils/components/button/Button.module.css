@@ -1,11 +1,13 @@
 .button {
-    width: 255px;
+    width: fit-content;
+    min-width: 100px;
     height: 40px;
 
     border: none;
     border-radius: 5px;
 
-    color: white;
+    color: var(--secondary-text-color);
+    font-weight: bold;
 
     background-color: var(--secondary-color);
 

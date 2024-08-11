@@ -1,0 +1,24 @@
+.mount_box__container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    transition: var(--animation-time) height;
+}
+
+.mount_box__container span{
+    font-size: 5rem;
+    padding: 5px;
+    border-radius: 50%;
+    border: solid 3px var(--primary-color);
+    color: #787878;
+    cursor: pointer;
+}
+
+
+.mount_box__container div{
+    width: 10%;
+    height: 3px;
+    background-color: var(--primary-color);
+}
+

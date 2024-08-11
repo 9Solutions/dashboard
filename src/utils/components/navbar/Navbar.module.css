@@ -72,3 +72,9 @@
 
     margin-right: 16px;
 }
+
+@media (max-width: 600px) {
+    .navbar__title {
+        font-size: 3.5vw;
+    }
+}

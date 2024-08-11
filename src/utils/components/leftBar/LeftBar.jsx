@@ -8,7 +8,7 @@ const LeftBar = () => {
     const location = useLocation();
     const { pathname } = location;
     
-    const [isClosed, setIsClosed] = useState(localStorage.getItem('isClosed') === 'true' ? true : false);
+    const [isClosed, setIsClosed] = useState(localStorage.getItem('isClosed') === 'true');
 
     const isActive = (path) => {
         return pathname === path;
