@@ -4,6 +4,7 @@
 
 :root {
     --primary-color: rgb(0, 136, 22);
+    --primary-color-dark: rgb(0, 109, 18);
     --secondary-color: #F79A00;
     --secondary-color-dark: #D97B00;
     --secondary-text-color: #1E1E1E;

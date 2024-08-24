@@ -82,3 +82,23 @@ export const patchCaixaStatus = async (idCaixa, status) => {
 export const getCaixaByQrCodeToken = async (qrCodeToken) => {
     return api.get(`/caixas/buscar-por-qrcode/${qrCodeToken}`);
 }
+
+export const postFoto = async (foto) => {
+    const formData = new FormData();
+    formData.append("image", foto);
+    return api.post(`/fotos/upload`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    });
+}
+
+export const postFotoEmail = async (foto) => {
+    const formData = new FormData();
+    formData.append("image", foto);
+    return api.post(`/fotos/upload-email`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    });
+}

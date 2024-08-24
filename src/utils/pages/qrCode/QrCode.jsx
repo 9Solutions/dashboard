@@ -3,8 +3,10 @@ import QrFrame from "../../assets/qr-frame.svg";
 import QrScanner from "qr-scanner";
 import style from "./QrCode.module.css";
 import { toast } from "react-toastify";
-import Button from "../../components/button/Button";
-import {getStatusCaixas, patchCaixaStatus, getCaixaByQrCodeToken} from "../../backend/methods";
+import LoadModal from "../../components/modals/LoadModal";
+import {getStatusCaixas, patchCaixaStatus, getCaixaByQrCodeToken, postFoto} from "../../backend/methods";
+import {base64ToBlob} from "../../globals";
+import ConfirmPhotoModal from "../../components/modals/ConfirmPhotoModal";
 
 const QrCode = () => {
     const scanner = useRef(null);
@@ -12,10 +14,12 @@ const QrCode = () => {
     const qrBoxEl = useRef(null);
     const canvasRef = useRef(null);
     const [qrOn, setQrOn] = useState(true);
-    const [enableFoto, setEnableFoto] = useState(false);
+    const [enableFoto, setEnableFoto] = useState(true);
     const [statusCaixas, setStatusCaixas] = useState();
     const [caixa, setCaixa] = useState(undefined);
     const [callBack, setCallBack] = useState(false);
+    const [load, setLoad] = useState(false);
+    const [image, setImage] = useState(undefined);
     const scannedResult = useRef("");
 
     const isSHA256 = (text) => {
@@ -141,6 +145,8 @@ const QrCode = () => {
             );
     }, [qrOn]);
 
+
+
     const capture = ()=> {
         const video = videoEl.current;
         const canvas = canvasRef.current;
@@ -154,44 +160,56 @@ const QrCode = () => {
 
 
         const imageSrc = canvas.toDataURL("image/jpeg");
+        const parts = imageSrc.split(';base64,');
 
-        const link = document.createElement("a");
-        link.href = imageSrc;
-        link.download = "frame-capturado.jpg";
+        setLoad(true);
 
-        // Adiciona o link ao documento e aciona o clique
-        document.body.appendChild(link);
-        link.click();
-
-        // Remove o link do documento
-        document.body.removeChild(link);
+        postFoto(base64ToBlob(parts[1], "image/jpeg")).then((response) => {
+            let imageBase64 = "data:image/jpeg;base64,"+response.data;
+            setImage(imageBase64);
+        }).catch((error) => {
+            console.error("Erro ao enviar a foto: ", error);
+        });
     }
 
     return (
-        <div className={style["qr-reader"]}>
-            {/* QR */}
-            <video ref={videoEl}></video>
-            <div ref={qrBoxEl} className="qr-box">
+
+            <div className={style["qr-reader"]}>
+                {/* QR */}
+                <video ref={videoEl}></video>
+                <div ref={qrBoxEl} className="qr-box">
+                    {
+                        !enableFoto &&
+                        <img
+                            src={QrFrame}
+                            alt="Qr Frame"
+                            width={"50%"}
+                            height={"50%"}
+                            className={style["qr-frame"]}
+                        />
+                    }
+                </div>
+
                 {
-                    !enableFoto &&
-                    <img
-                        src={QrFrame}
-                        alt="Qr Frame"
-                        width={256}
-                        height={256}
-                        className={style["qr-frame"]}
-                    />
+                    enableFoto &&
+                    <div className={style["bt-foto-container"]}>
+                        {!load && <button onClick={capture} className={style['bt-foto']}></button>}
+
+
+                        {load && <div className={style["spinner"]}></div>}
+
+                    </div>
                 }
+
+                {
+                    (load && image) &&
+                    <ConfirmPhotoModal setLoad={setLoad} setEnableFoto={setEnableFoto} image={image}></ConfirmPhotoModal>
+                }
+
+
+                <canvas ref={canvasRef} style={{display: "none"}}/>
             </div>
 
-            {
-                enableFoto &&
-                <Button title={"Tirar Foto"} className={style['bt-foto']} onClick={capture}/>
-            }
-
-
-            <canvas ref={canvasRef} style={{display: "none"}}/>
-        </div>
     );
 };
 
