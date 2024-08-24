@@ -70,3 +70,15 @@ export const putProduto = async (id, produto) => {
 export const delProduto = async (id) => {
     return api.patch(`/produtos?id=${id}&condicao=0`);
 }
+
+export const getStatusCaixas = async () => {
+    return api.get(`/status-caixa`);
+}
+
+export const patchCaixaStatus = async (idCaixa, status) => {
+    return api.patch(`/caixas?idCaixa=${idCaixa}&status=${status}`);
+}
+
+export const getCaixaByQrCodeToken = async (qrCodeToken) => {
+    return api.get(`/caixas/buscar-por-qrcode/${qrCodeToken}`);
+}

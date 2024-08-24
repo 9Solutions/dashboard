@@ -3,24 +3,97 @@ import QrFrame from "../../assets/qr-frame.svg";
 import QrScanner from "qr-scanner";
 import style from "./QrCode.module.css";
 import { toast } from "react-toastify";
+import Button from "../../components/button/Button";
+import {getStatusCaixas, patchCaixaStatus, getCaixaByQrCodeToken} from "../../backend/methods";
 
 const QrCode = () => {
     const scanner = useRef(null);
     const videoEl = useRef(null);
     const qrBoxEl = useRef(null);
+    const canvasRef = useRef(null);
     const [qrOn, setQrOn] = useState(true);
+    const [enableFoto, setEnableFoto] = useState(false);
+    const [statusCaixas, setStatusCaixas] = useState();
+    const [caixa, setCaixa] = useState(undefined);
+    const [callBack, setCallBack] = useState(false);
+    const scannedResult = useRef("");
 
-    // Result
-    const [scannedResult, setScannedResult] = useState("");
+    const isSHA256 = (text) => {
+        const sha256Regex = /^[a-f0-9]{64}$/i;
+        return sha256Regex.test(text);
+    }
 
     const onScanSuccess = (result) => {
-        toast(result.data);
-        setScannedResult(result?.data);
+        result = result.data
+
+        if (result !== scannedResult.current) {
+            if (isSHA256(result)) {
+                scannedResult.current = result;
+                setCallBack(prev => !prev);
+                setEnableFoto(false);
+            }else {
+                toast.error("QR Code inválido");
+            }
+        }
     };
 
     const onScanFail = (err) => {
-        console.log(err);
     };
+
+    useEffect(() => {
+        getStatusCaixas().then((response) => {
+            setStatusCaixas(response.data);
+        }).catch((error) => {
+            console.error("Erro ao buscar os status das caixas: ", error);
+        })
+    }, []);
+
+    useEffect(() => {
+        const getCaixaByQrCode = (qrCode) => {
+            getCaixaByQrCodeToken(qrCode).then((response) => {
+                if (response.status === 200) {
+                    setCaixa(response.data);
+                } else {
+                    toast.error("Caixa não encontrada");
+                }
+            }).catch((error) => {
+                console.error("Erro ao buscar a caixa pelo QR Code: ", error);
+            })
+        }
+
+        if (scannedResult.current !== ""){
+            getCaixaByQrCode(scannedResult.current);
+        }
+    }, [callBack]);
+
+    useEffect(() => {
+        const updateCaixaStatus = (caixa) => {
+            let statusAtual = caixa.etapas[caixa.etapas.length - 1].id;
+            let proximoStatus = statusAtual + 1;
+
+            if (proximoStatus > statusCaixas[statusCaixas.length - 1].id){
+                toast.warn("Caixa já foi entregue");
+
+            }else{
+                if (proximoStatus === statusCaixas[statusCaixas.length - 1].id) {
+                    toast.success("Caixa entregue com sucesso");
+                    setEnableFoto(true);
+                }
+
+                patchCaixaStatus(caixa.id, proximoStatus).then(() => {
+                    toast.success("Status da caixa atualizado com sucesso");
+                }).catch((error) => {
+                    console.error("Erro ao atualizar o status da caixa: ", error);
+                })
+            }
+
+        }
+
+        if (caixa){
+            updateCaixaStatus(caixa);
+            setCaixa(undefined);
+        }
+    }, [caixa]);
 
     useEffect(() => {
         const initializeScanner = async () => {
@@ -68,19 +141,56 @@ const QrCode = () => {
             );
     }, [qrOn]);
 
+    const capture = ()=> {
+        const video = videoEl.current;
+        const canvas = canvasRef.current;
+        const context = canvas.getContext("2d");
+
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+
+        const imageSrc = canvas.toDataURL("image/jpeg");
+
+        const link = document.createElement("a");
+        link.href = imageSrc;
+        link.download = "frame-capturado.jpg";
+
+        // Adiciona o link ao documento e aciona o clique
+        document.body.appendChild(link);
+        link.click();
+
+        // Remove o link do documento
+        document.body.removeChild(link);
+    }
+
     return (
         <div className={style["qr-reader"]}>
             {/* QR */}
             <video ref={videoEl}></video>
             <div ref={qrBoxEl} className="qr-box">
-                <img
-                    src={QrFrame}
-                    alt="Qr Frame"
-                    width={256}
-                    height={256}
-                    className={style["qr-frame"]}
-                />
+                {
+                    !enableFoto &&
+                    <img
+                        src={QrFrame}
+                        alt="Qr Frame"
+                        width={256}
+                        height={256}
+                        className={style["qr-frame"]}
+                    />
+                }
             </div>
+
+            {
+                enableFoto &&
+                <Button title={"Tirar Foto"} className={style['bt-foto']} onClick={capture}/>
+            }
+
+
+            <canvas ref={canvasRef} style={{display: "none"}}/>
         </div>
     );
 };
