@@ -13,7 +13,7 @@ const CadastroUsuarios = () => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
-
+  const permissao = 'admin'
     const handleSave = () => {
       if (senha !== confirmarSenha) {
         toast.error("As senhas não coincidem");
@@ -23,6 +23,7 @@ const CadastroUsuarios = () => {
           .post(`/doadores`, {
             email,
             senha,
+            permissao,
           })
           .then(() => {
             toast.success("Cadastro realizado  com sucesso!");
