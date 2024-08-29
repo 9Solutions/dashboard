@@ -7,6 +7,7 @@ import Doacoes from "./utils/pages/doacoes/Doacoes";
 import Logout from "./utils/pages/logout/Logout";
 import Produtos from "./utils/pages/produtos/Produtos";
 import QrCode from "./utils/pages/qrCode/QrCode";
+import CadastroUsuarios from "./utils/pages/cadastrar-usuarios/CadastroUsuarios"
 
 const rotas = () => {
    return(
@@ -18,6 +19,7 @@ const rotas = () => {
                 <Route path="/itens-doacao" element={<Produtos/>} exact />
                 <Route path="/logout" element={<Logout/>} exact />
                 <Route path="/qr-code" element={<QrCode/>} exact />
+                <Route path="/cadastro-usuarios" element={<CadastroUsuarios/>} exact />
             </Routes>
        </BrowserRouter>
    )
