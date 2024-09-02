@@ -1,23 +1,10 @@
 .page__container{
-    width: 100vw;
-    height: 100vh;
-
     display: flex;
 }
 
-.left__panel {
-    background-color: var(--primary-color);
-
-    width: 20%;
-    height: 100vh;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 
 .login__container {
-    width: 80%;
+    width: 100%;
     height: 100vh;
 
     display: flex;
@@ -39,8 +26,6 @@
     width: fit-content;
 
     border-bottom: 5px solid var(--primary-color);
-    position: absolute;
-    top: -12vh;
 }
 
 .login__form{

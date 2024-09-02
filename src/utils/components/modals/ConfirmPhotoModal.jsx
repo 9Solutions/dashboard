@@ -8,7 +8,7 @@ import {base64ToBlob} from "../../globals";
 const ConfirmPhotoModal = ({setLoad, setEnableFoto, image}) => {
     const sendPhotoToEmail = () => {
         const parts = image.split(';base64,');
-        postFotoEmail(base64ToBlob(parts[1], "image/jpeg")).then((response) => {
+        postFotoEmail(base64ToBlob(parts[1], "image/jpeg"), 6).then((response) => {
             setLoad(false);
             setEnableFoto(false);
         }).catch((error) => {

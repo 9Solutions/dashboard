@@ -19,7 +19,7 @@ const rotas = () => {
                 <Route path="/itens-doacao" element={<Produtos/>} exact />
                 <Route path="/logout" element={<Logout/>} exact />
                 <Route path="/qr-code" element={<QrCode/>} exact />
-                <Route path="/cadastro-usuarios" element={<CadastroUsuarios/>} exact />
+                <Route path="/usuarios" element={<CadastroUsuarios/>} exact />
             </Routes>
        </BrowserRouter>
    )

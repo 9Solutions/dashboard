@@ -32,15 +32,15 @@ export const getAllDoacoesDetalhadas = async () => {
 }
 
 export const getCaixasEntregar = async () => {
-    return api.get(`/vw-caixas-para-entregar`);
+    return api.get(`/dashboard/caixas-para-entregar`);
 }
 
 export const getCaixasMontar = async () => {
-    return api.get(`/vw-caixas-em-montagem`);
+    return api.get(`/dashboard/caixas-em-montagem`);
 }
 
 export const getCaixasAtrasadas = async () => {
-    return api.get(`/vw-caixas-atrasadas`);
+    return api.get(`/dashboard/caixas-atrasadas`);
 }
 
 export const getProdutos = async () => {
@@ -93,10 +93,10 @@ export const postFoto = async (foto) => {
     });
 }
 
-export const postFotoEmail = async (foto) => {
+export const postFotoEmail = async (foto, id) => {
     const formData = new FormData();
     formData.append("image", foto);
-    return api.post(`/fotos/upload-email`, formData, {
+    return api.post(`/fotos/upload-email/${id}`, formData, {
         headers: {
             "Content-Type": "multipart/form-data"
         }
