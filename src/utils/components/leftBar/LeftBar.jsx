@@ -57,22 +57,16 @@ const LeftBar = () => {
                 <img src={logo_img} alt='Logo do Projeto Caixa de Sapato'/>
             </div>
 
-            {section_LeftBar('Menu', [{
+            {section_LeftBar('Menu', [
+                {
+                    label: 'Histórico de doações',
+                    path: '/historico-doacoes',
+                    icon: 'description'
+                },
+                {
                 label: 'Doações',
-                path: '/doacoes',
+                path: '/doacao-lote',
                 icon: 'volunteer_activism'
-            }, {
-                label: 'Histórico de doações',
-                path: '/historico-doacoes',
-                icon: 'description'
-            }, {
-                label: 'Pagamentos',
-                path: '/pagamentos',
-                icon: 'wallet'
-            }, {
-                label: 'Cupons',
-                path: '/cupons',
-                icon: 'card_giftcard'
             }
             ])}
 
@@ -85,10 +79,6 @@ const LeftBar = () => {
             ])}
 
             {section_LeftBar('Outros', [{
-                label: 'Configurações',
-                path: '/configuracoes',
-                icon: 'settings'
-            }, {
                 label: 'Usuários',
                 path: '/usuarios',
                 icon: 'person'

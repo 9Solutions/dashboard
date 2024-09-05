@@ -8,6 +8,7 @@ import Logout from "./utils/pages/logout/Logout";
 import Produtos from "./utils/pages/produtos/Produtos";
 import QrCode from "./utils/pages/qrCode/QrCode";
 import CadastroUsuarios from "./utils/pages/cadastrar-usuarios/CadastroUsuarios"
+import DoacaoLote from "./utils/pages/doacaoLote/DoacaoLote";
 
 const rotas = () => {
    return(
@@ -20,6 +21,8 @@ const rotas = () => {
                 <Route path="/logout" element={<Logout/>} exact />
                 <Route path="/qr-code" element={<QrCode/>} exact />
                 <Route path="/usuarios" element={<CadastroUsuarios/>} exact />
+                <Route path="/doacao-lote" element={<DoacaoLote/>} exact />
+
             </Routes>
        </BrowserRouter>
    )

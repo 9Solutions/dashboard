@@ -16,7 +16,7 @@ const Login = () => {
 
     useEffect(() => {
         if (sessionStorage.getItem("auth") !== null) {
-            navigate("/doacoes");
+            navigate("/historico-doacoes");
         }
     }
     , [navigate]);
@@ -42,6 +42,7 @@ const Login = () => {
         
                 sessionStorage.setItem("auth", JSON.stringify(data));
 
+
                 //Verificar se é smartphone
                 if( navigator.userAgent.match(/Android/i)
                     || navigator.userAgent.match(/webOS/i)
@@ -51,11 +52,15 @@ const Login = () => {
                     || navigator.userAgent.match(/BlackBerry/i)
                     || navigator.userAgent.match(/Windows Phone/i)
                 ){
-                    navigate("/qr-code");
+                    window.location.href = "/qr-code";
                 }
                 else {
-                    navigate("/doacoes");
+                    window.location.href = "/historico-doacoes";
                 }
+
+
+
+
 
 
             })
