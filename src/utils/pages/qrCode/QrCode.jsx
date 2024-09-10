@@ -13,8 +13,9 @@ const QrCode = () => {
     const videoEl = useRef(null);
     const qrBoxEl = useRef(null);
     const canvasRef = useRef(null);
+    const idPedido = useRef(null);
     const [qrOn, setQrOn] = useState(true);
-    const [enableFoto, setEnableFoto] = useState(true);
+    const [enableFoto, setEnableFoto] = useState(false);
     const [statusCaixas, setStatusCaixas] = useState();
     const [caixa, setCaixa] = useState(undefined);
     const [callBack, setCallBack] = useState(false);
@@ -57,6 +58,7 @@ const QrCode = () => {
             getCaixaByQrCodeToken(qrCode).then((response) => {
                 if (response.status === 200) {
                     setCaixa(response.data);
+                    idPedido.current = response.data.idPedido
                 } else {
                     toast.error("Caixa não encontrada");
                 }
@@ -203,7 +205,7 @@ const QrCode = () => {
 
                 {
                     (load && image) &&
-                    <ConfirmPhotoModal setLoad={setLoad} setEnableFoto={setEnableFoto} image={image}></ConfirmPhotoModal>
+                    <ConfirmPhotoModal setLoad={setLoad} setEnableFoto={setEnableFoto} image={image} setImage={setImage} idPedido={idPedido}></ConfirmPhotoModal>
                 }
 
 

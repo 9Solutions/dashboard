@@ -5,10 +5,10 @@ import {postFotoEmail} from "../../backend/methods";
 import {base64ToBlob} from "../../globals";
 
 
-const ConfirmPhotoModal = ({setLoad, setEnableFoto, image}) => {
+const ConfirmPhotoModal = ({setLoad, setEnableFoto, image, setImage, idPedido}) => {
     const sendPhotoToEmail = () => {
         const parts = image.split(';base64,');
-        postFotoEmail(base64ToBlob(parts[1], "image/jpeg"), 6).then((response) => {
+        postFotoEmail(base64ToBlob(parts[1], "image/jpeg"), idPedido.current).then((response) => {
             setLoad(false);
             setEnableFoto(false);
         }).catch((error) => {
@@ -17,6 +17,7 @@ const ConfirmPhotoModal = ({setLoad, setEnableFoto, image}) => {
     }
 
     const onCancel = () => {
+        setImage(undefined);
         setLoad(false);
     }
 

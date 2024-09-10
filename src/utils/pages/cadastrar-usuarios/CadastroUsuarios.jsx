@@ -10,11 +10,15 @@ import api from "../../../api"
 import LeftBar from "../../components/leftBar/LeftBar";
 
 const CadastroUsuarios = () => {
-  const email = useRef("");
-  const senha = useRef("");
-  const confirmarSenha = useRef("");
+  const emailRef = useRef("");
+  const senhaRef = useRef("");
+  const confirmarSenhaRef = useRef("");
   const permissao = 'admin'
   const handleSave = () => {
+    const email = emailRef.current.value;
+    const senha = senhaRef.current.value;
+    const confirmarSenha = confirmarSenhaRef.current.value;
+
     if (senha !== confirmarSenha) {
       toast.error("As senhas não coincidem");
     } else {
@@ -24,6 +28,7 @@ const CadastroUsuarios = () => {
           email,
           senha,
           permissao,
+
         })
         .then(() => {
           toast.success("Cadastro realizado  com sucesso!");
@@ -59,21 +64,21 @@ const CadastroUsuarios = () => {
                 title="E-mail"
                 type="email"
                 placeholder="Digite seu e-mail"
-                inputRef={email}
+                inputRef={emailRef}
                 required={true}
               />
               <Input
                 title="Senha"
                 type="password"
                 placeholder="Digite sua senha"
-                inputRef={senha}
+                inputRef={senhaRef}
                 required={true}
               />
               <Input
                 title="Confirmar Senha"
                 type="password"
                 placeholder="Confirme sua senha"
-                inputRef={confirmarSenha}
+                inputRef={confirmarSenhaRef}
                 required={true}
               />
               <Button title="Cadastrar" onClick={handleSave} />
