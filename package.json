@@ -10,6 +10,7 @@
     "axios": "^1.7.2",
     "bootstrap-icons": "^1.11.3",
     "handlebars": "^4.7.8",
+    "http-proxy-middleware": "^3.0.2",
     "puppeteer": "^22.10.0",
     "puppeteer-html-pdf": "^4.0.8",
     "qr-scanner": "^1.4.2",
@@ -45,6 +46,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "proxy": "http://192.168.137.1:8080"
+  }
 }

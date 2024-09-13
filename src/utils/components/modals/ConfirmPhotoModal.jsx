@@ -15,7 +15,7 @@ const ConfirmPhotoModal = ({setLoad, setEnableFoto, image, setImage, idPedido}) 
             setIsSend(true);
             postFotoEmail(base64ToBlob(parts[1], "image/jpeg"), idPedido.current).then((response) => {
                 setLoad(false);
-                setEnableFoto(false);
+                setEnableFoto(false); 
                 setIsSend(false);
             }).catch((error) => {
                 console.error("Erro ao enviar a foto: ", error);
