@@ -27,8 +27,8 @@ export const getDoacaoFiltro = async (status, data, idPedido) => {
     return api.get(`/java-api/pedidos/filter`, { params: { status, data, idPedido } });
 }
 
-export const getAllDoacoesDetalhadas = async () => {
-    return api.get(`/java-api/pedidos/all-details`);
+export const getPedidoDetalhado = async (id) => {
+    return api.get(`/java-api/pedidos/all-details/${id}`);
 }
 
 export const getCaixasEntregar = async () => {
@@ -100,5 +100,11 @@ export const postFotoEmail = async (foto, id) => {
         headers: {
             "Content-Type": "multipart/form-data"
         }
+    });
+}
+
+export const postPDF = async (pedido) => {
+    return api.post(`/node-api/gerar-pdf`, pedido, {
+        responseType: "blob"
     });
 }

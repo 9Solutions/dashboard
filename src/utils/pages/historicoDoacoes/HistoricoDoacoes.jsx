@@ -4,19 +4,18 @@ import LeftBar from "../../components/leftBar/LeftBar";
 import Navbar from "../../components/navbar/Navbar";
 import KPI from "../../components/kpi/KPI";
 import { useState, useEffect } from "react";
-import { getAllDoacoes, getDoacaoFiltro, getAllDoacoesDetalhadas, getCaixasEntregar, getCaixasAtrasadas, getCaixasMontar } from "../../backend/methods";
+import {
+    getAllDoacoes,
+    getDoacaoFiltro,
+    getPedidoDetalhado,
+    getCaixasEntregar,
+    getCaixasAtrasadas,
+    getCaixasMontar,
+    postPDF
+} from "../../backend/methods";
 import { tranformDate, tranformPhone } from "../../globals";
 import { useSearchParams } from "react-router-dom";
-import GenerateMatriz from "../../generateMatriz";
 
-const getMatriz = async () => {
-    getAllDoacoesDetalhadas().then((response) => {
-        var matriz = GenerateMatriz(response.data);
-
-        localStorage.setItem("grafico_para_monitoramento_de_atrasos", JSON.stringify(matriz));
-    })
-}
-    
 
 const HistoricoDoacoes = () => {
     const [searchParams] = useSearchParams();
@@ -76,10 +75,21 @@ const HistoricoDoacoes = () => {
         })
     }
 
+    const getPDF = (idPedido) => {
+        getPedidoDetalhado(idPedido).then((response) => {
+            let pedido = response.data
+            postPDF([pedido]).then((responsePdf) => {
+                const blob = new Blob([responsePdf.data], { type: 'application/pdf' });
+                const url = window.URL.createObjectURL(blob);
+                window.open(url, '_blank');
+            }).catch((error) => {
+                console.error("Erro ao buscar o PDF: ", error);
+            })
+        });
+    }
+
 
     useEffect(() => {
-        getMatriz();
-
         loadDoacoes();
 
         loadQtdEntrega();
@@ -156,7 +166,7 @@ const HistoricoDoacoes = () => {
                                     <td>{tranformDate(doacao.dataPedido)}</td>
                                     <td>{doacao.valorTotal}</td>
                                     <td><div className={`${styles["circle"]} ${styles["red"]}`}></div></td>
-                                    <td><span class={`material-symbols-rounded ${styles["download"]}`}>
+                                    <td onClick={() => getPDF(doacao.id)}><span class={`material-symbols-rounded ${styles["download"]}`}>
                                         download
                                     </span></td>
                                 </tr>
