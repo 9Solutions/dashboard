@@ -9,7 +9,6 @@ import {
     getDoacaoFiltro,
     getPedidoDetalhado,
     getCaixasEntregar,
-    getCaixasAtrasadas,
     getCaixasMontar,
     postPDF
 } from "../../backend/methods";
@@ -22,7 +21,6 @@ const HistoricoDoacoes = () => {
 
     const [doacoes, setDoacoes] = useState([]);
     const [qtdEntrega, setQtdEntrega] = useState([]);
-    const [qtdAtrasadas, setQtdAtrasadas] = useState([]);
     const [qtdMontar, setQtdMontar] = useState([]);
 
     const data = searchParams.get('data');
@@ -35,7 +33,16 @@ const HistoricoDoacoes = () => {
     const loadDoacoes = () => {
         if (searchParams.size === 3) {
             getDoacaoFiltro(status, data, idDoacao).then((response) => {
-                setDoacoes(response.data);
+                let doacoes = response.data.reduce((acc, curr) => {
+                    if (acc[curr.id]) {
+                        acc[curr.id].quantidadeCaixas += 1;
+                    } else {
+                        acc[curr.id] = curr;
+                        acc[curr.id].quantidadeCaixas = 1;
+                    }
+                    return acc;
+                }, []);
+                setDoacoes(doacoes);
             }).catch((error) => {
                 console.error("Erro ao buscar as doações: ", error);
             })
@@ -66,14 +73,6 @@ const HistoricoDoacoes = () => {
         })
     }
 
-    const loadQtdAtrasadas = () => {
-        getCaixasAtrasadas().then((response) => {
-            setQtdAtrasadas(response.data[0].qtdCaixasAtrasadas);
-        }
-        ).catch((error) => {
-            console.error("Erro ao buscar as caixas atrasadas: ", error);
-        })
-    }
 
     const getPDF = (idPedido) => {
         getPedidoDetalhado(idPedido).then((response) => {
@@ -96,8 +95,6 @@ const HistoricoDoacoes = () => {
 
         loadQtdMontar();
 
-        loadQtdAtrasadas();
-
     }, [data, status, idDoacao, searchParams.size]);
 
     return (
@@ -105,41 +102,29 @@ const HistoricoDoacoes = () => {
             <LeftBar />
             <Navbar page_title="Histórico de Doações" />
             <div className={styles["kpi__container"]}>
-                <KPI title="Caixas que precisam ser feitas" count={qtdMontar} comparison="10" isIncrease={true} />
-                <KPI title="Caixas prontas para entrega" count={qtdEntrega} comparison="10" isIncrease={false} />
-                <KPI title="Caixas atrasadas" count={qtdAtrasadas} comparison="10" isIncrease={false} />
+                <KPI title="Caixas que precisam ser feitas" count={qtdMontar} />
+                <KPI title="Caixas prontas para entrega" count={qtdEntrega} />
             </div>
 
             <div className={styles["relatorio__container"]}>
                 <h1>Lista de Doações</h1>
                 <div className={styles["filtro__container"]}>
                     <form className={styles["form__filtros"]} method="GET">
-                        <div><label>Nº do Pedido</label>
+                        <div><label>Nº da Doação</label>
                             <input type="text" placeholder="000000" name="idDoacao" defaultValue={idDoacao} /></div>
                         <div><label>Data Doação</label>
                             <input type="date" name="data" defaultValue={data} /></div>
                         <div><label>Status</label>
                             <select name="status">
                                 <option value="" selected={isSelected("")}>Todos</option>
-                                <option value="novo" selected={isSelected("novo")}>Novo</option>
-                                <option value="montagem" selected={isSelected("montagem")}>Em Montagem</option>
-                                <option value="entregue" selected={isSelected("entregue")}>Em Entrega</option>
-                                <option value="finalizado" selected={isSelected("finalizado")}>Finalizado</option>
+                                <option value="Pronta para montagem" selected={isSelected("Pronta para montagem")}>Pronta para Montagem</option>
+                                <option value="Pronta para entrega" selected={isSelected("Pronta para entrega")}>Pronta para Entrega</option>
+                                <option value="Entregue" selected={isSelected("Entregue")}>Entregue</option>
                             </select>
                         </div>
 
                         <button type="submit">Filtrar</button>
                     </form>
-
-                    <span className={styles["legenda"]}>Legenda <span class="material-symbols-outlined">
-                        info
-                    </span>
-                        <div className={styles["legenda-field"]}>
-                            <div><div className={`${styles["circle"]} ${styles["red"]}`}></div><span>+2 Semanas</span></div>
-                            <div><div className={`${styles["circle"]} ${styles["yellow"]}`}></div><span>+5 Dias</span></div>
-                            <div><div className={`${styles["circle"]} ${styles["green"]}`}></div><span>Até 5 Dias</span></div>
-                        </div>
-                    </span>
                 </div>
 
                 <table className={styles["tabela"]}>
@@ -151,7 +136,7 @@ const HistoricoDoacoes = () => {
                             <th>Status</th>
                             <th>Data Doação</th>
                             <th>Valor</th>
-                            <th>Status de Espera</th>
+                            <th>Caixas</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -160,12 +145,12 @@ const HistoricoDoacoes = () => {
                             doacoes.map((doacao, index) => (
                                 <tr key={index}>
                                     <td>{doacao.id}</td>
-                                    <td>{doacao.doador.nome}</td>
+                                    <td>{doacao.doador.nome || doacao.doador.nomeCompleto}</td>
                                     <td>{tranformPhone(doacao.doador.telefone)}</td>
                                     <td>{doacao.statusPedido.status}</td>
                                     <td>{tranformDate(doacao.dataPedido)}</td>
                                     <td>{doacao.valorTotal}</td>
-                                    <td><div className={`${styles["circle"]} ${styles["red"]}`}></div></td>
+                                    <td>{doacao.quantidadeCaixas}</td>
                                     <td onClick={() => getPDF(doacao.id)}><span class={`material-symbols-rounded ${styles["download"]}`}>
                                         download
                                     </span></td>

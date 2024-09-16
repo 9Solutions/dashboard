@@ -43,7 +43,8 @@ const EditProductContainer = ({data, containerHiddenState, setReload, estagio}) 
     return (
         <div className={style['edit_product__container']} style={{display: editContainerisHidden ? 'none' : 'block'}}>
             <div className={style['right_buttons__container']}>
-                <Button title={'Adicionar Categoria'} style={{width: '100px'}} onClick={() => console.log('Adicionar Categoria')}/>
+                {/*<Button title={'Adicionar Categoria'} style={{width: '100px'}}
+                         onClick={() => console.log('Adicionar Categoria')}/>*/}
                 <span className={`material-symbols-outlined close__button`}
                       onClick={() => setEditContainerisHidden(true)}>close</span>
             </div>
@@ -64,7 +65,7 @@ const EditProductContainer = ({data, containerHiddenState, setReload, estagio}) 
                                                 edit
                                             </span>
                                         <div className={style['edit-product-item-image']}>
-                                            <img src={product['imagem']} alt={product['nome']}/>
+                                            <img src='https://pplider.com.br/image/no_image.jpg' alt={product['nome']}/>
                                         </div>
                                         <div className={style['product_item__info']}>
                                             <h3>{product['nome']}</h3>

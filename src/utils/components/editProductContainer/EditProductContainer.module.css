@@ -42,9 +42,13 @@ body {
     width: fit-content;
     position: relative;
 
-
-
     padding: 16px;
+}
+
+.edit-product-item-image img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
 }
 
 .product_item__info {
