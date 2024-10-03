@@ -12,7 +12,7 @@ import {
     getCaixasMontar,
     postPDF
 } from "../../backend/methods";
-import { tranformDate, tranformPhone } from "../../globals";
+import {base64ToBlob, tranformDate, tranformPhone} from "../../globals";
 import { useSearchParams } from "react-router-dom";
 
 
@@ -74,11 +74,15 @@ const HistoricoDoacoes = () => {
     }
 
 
-    const getPDF = (idPedido) => {
+    const getPDF = (idPedido, element) => {
+        console.log(element)
+
         getPedidoDetalhado(idPedido).then((response) => {
             let pedido = response.data
-            postPDF([pedido]).then((responsePdf) => {
-                const blob = new Blob([responsePdf.data], { type: 'application/pdf' });
+            postPDF({
+                "body": [pedido]
+            }).then((responsePdf) => {
+                const blob = new Blob([base64ToBlob(responsePdf.data.body)], { type: 'application/pdf' });
                 const url = window.URL.createObjectURL(blob);
                 window.open(url, '_blank');
             }).catch((error) => {

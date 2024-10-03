@@ -104,7 +104,9 @@ export const postFotoEmail = async (foto, id) => {
 }
 
 export const postPDF = async (pedido) => {
-    return api.post(`/node-api/gerar-pdf`, pedido, {
-        responseType: "blob"
-    });
+    return api.post(`/lambda-services/live/teste`, pedido);
+}
+
+export const postImage = async (fotoBase64) => {
+    return api.post(`/lambda-services/live/foto`, fotoBase64);
 }

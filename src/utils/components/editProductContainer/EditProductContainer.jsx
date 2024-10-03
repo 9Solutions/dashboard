@@ -65,7 +65,7 @@ const EditProductContainer = ({data, containerHiddenState, setReload, estagio}) 
                                                 edit
                                             </span>
                                         <div className={style['edit-product-item-image']}>
-                                            <img src='https://pplider.com.br/image/no_image.jpg' alt={product['nome']}/>
+                                            <img src={product.urlImagem} alt={product['nome']}/>
                                         </div>
                                         <div className={style['product_item__info']}>
                                             <h3>{product['nome']}</h3>

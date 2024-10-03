@@ -4,15 +4,15 @@ module.exports = function(app) {
     app.use(
         '/java-api',
         createProxyMiddleware({
-            target: 'http://192.168.15.56:8080',
+            target: 'http://192.168.56.1:8080',
             changeOrigin: true,
         })
     );
 
     app.use(
-        '/node-api',
+        '/lambda-services',
         createProxyMiddleware({
-            target: 'http://192.168.15.56:9999',
+            target: 'https://1cj3hzfx8k.execute-api.us-east-1.amazonaws.com',
             changeOrigin: true,
         })
     );
