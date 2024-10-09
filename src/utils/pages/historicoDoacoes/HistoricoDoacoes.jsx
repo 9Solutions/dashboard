@@ -3,6 +3,9 @@ import styles from "./HistoricoDoacoes.module.css";
 import LeftBar from "../../components/leftBar/LeftBar";
 import Navbar from "../../components/navbar/Navbar";
 import KPI from "../../components/kpi/KPI";
+import importPic from "../../assets/import.png";
+import exportPic from "../../assets/export.png";
+
 import { useState, useEffect } from "react";
 import {
     getAllDoacoes,
@@ -112,6 +115,15 @@ const HistoricoDoacoes = () => {
 
             <div className={styles["relatorio__container"]}>
                 <h1>Lista de Doações</h1>
+                <div className={styles["botoes"]}>
+                <button className={styles["botao-import"]} onClick={""}>
+                    <img src={importPic} alt="" />
+                    Importar CSV</button>
+                <button className={styles["botao-export"]} onClick={""}>
+                    <img src={exportPic} alt="" />
+                    Exportar CSV</button>
+                </div>
+              
                 <div className={styles["filtro__container"]}>
                     <form className={styles["form__filtros"]} method="GET">
                         <div><label>Nº da Doação</label>
