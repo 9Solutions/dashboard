@@ -25,6 +25,7 @@ const HistoricoDoacoes = () => {
     const [doacoes, setDoacoes] = useState([]);
     const [qtdEntrega, setQtdEntrega] = useState([]);
     const [qtdMontar, setQtdMontar] = useState([]);
+    const [selectedFile, setSelectedFile] = useState(null);
 
     const data = searchParams.get('data');
     const status = searchParams.get('status');
@@ -58,6 +59,48 @@ const HistoricoDoacoes = () => {
         }
     }
 
+    const handleFileChange = (event) => {
+        setSelectedFile(event.target.files[0]);
+      };
+
+      const importCSV = () => {
+        if (!selectedFile) {
+            alert("Por favor, selecione um arquivo CSV");
+            return;
+        }
+    
+        const fileExtension = selectedFile.name.split('.').pop().toLowerCase();
+        if (fileExtension !== 'csv') {
+            alert("Por favor, selecione um arquivo no formato CSV.");
+            return;
+        }
+    
+        const formData = new FormData();
+        formData.append('file', selectedFile);
+    
+        fetch('http://localhost:8080/api/import-csv', {
+            method: 'POST',
+            body: formData,
+            headers: {
+            },
+        })
+        .then((response) => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                throw new Error('Falha ao importar o arquivo.');
+            }
+        })
+        .then((data) => {
+            alert('Arquivo CSV importado com sucesso!');
+            console.log('Resposta do servidor:', data);
+        })
+        .catch((error) => {
+            console.error("Erro ao importar o arquivo:", error);
+            alert('Erro ao importar o arquivo.');
+        });
+    };
+      
     const loadQtdEntrega = () => {
         getCaixasEntregar().then((response) => {
             setQtdEntrega(response.data[0].qtdCaixasParaEntregar);
@@ -94,6 +137,34 @@ const HistoricoDoacoes = () => {
         });
     }
 
+    const exportCSV = () => {
+        if (doacoes.length === 0) {
+            alert('Nenhuma doação para exportar.');
+            return;
+        }
+    
+        let csvContent = 'Nº Doação,Doador,Telefone,Status,Data Doação,Valor,Quantidade de Caixas\n';
+    
+        doacoes.forEach((doacao) => {
+            csvContent += `${doacao.id},${doacao.doador.nome || doacao.doador.nomeCompleto},${tranformPhone(doacao.doador.telefone)},${doacao.statusPedido.status},${tranformDate(doacao.dataPedido)},${doacao.valorTotal},${doacao.quantidadeCaixas}\n`;
+        });
+    
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = window.URL.createObjectURL(blob);
+    
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'historico_doacoes.csv');
+    
+        document.body.appendChild(link);
+        link.click();
+    
+        document.body.removeChild(link);
+    };
+    
+
+
+
 
     useEffect(() => {
         loadDoacoes();
@@ -116,14 +187,23 @@ const HistoricoDoacoes = () => {
             <div className={styles["relatorio__container"]}>
                 <h1>Lista de Doações</h1>
                 <div className={styles["botoes"]}>
-                <button className={styles["botao-import"]} onClick={""}>
-                    <img src={importPic} alt="" />
-                    Importar CSV</button>
-                <button className={styles["botao-export"]} onClick={""}>
-                    <img src={exportPic} alt="" />
-                    Exportar CSV</button>
+                    <input 
+                      type="file" 
+                      accept=".csv" 
+                      onChange={handleFileChange} 
+                      style={{ display: 'none' }} 
+                      id="upload-csv"
+                    />
+                    <label htmlFor="upload-csv" className={styles["botao-import"]}>
+                        <img src={importPic} alt="" />
+                        Importar CSV
+                    </label>
+            
+
+                    <button className={styles["botao-export"]} onClick={exportCSV}>
+                        <img src={exportPic} alt="" />Exportar CSV</button>
+
                 </div>
-              
                 <div className={styles["filtro__container"]}>
                     <form className={styles["form__filtros"]} method="GET">
                         <div><label>Nº da Doação</label>
