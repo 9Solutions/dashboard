@@ -6,6 +6,7 @@
     width: 25%;
     font-weight: 500;
     margin-top: 5%;
+    margin-bottom: 1%;
 }
 
 .div-lote {
@@ -63,11 +64,11 @@
     background-color: #F79A00;
     color: #FFFFFF;
     border: none;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 300;
     border-radius: 7px;
     margin-top: 2%;
-    width: 20%;
+    width: 16%;
     height: 5.5vh;
     display: flex;
     align-items: center;
@@ -85,7 +86,13 @@
 }
 
 .caixa-carrinho{
+    
     display: flex;
+}
+
+.caixa-carrinho img{
+    height: 25%;
+    width: 25%;
 }
 
 .lado-direito p{

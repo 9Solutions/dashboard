@@ -43,7 +43,7 @@ const DoacaoLote = () => {
 
                         <div className={styles["caixa-carrinho"]}>
                             <img src={caixaCarrinho} alt="" />
-                            <p>Parabéns! Você fará muitas crianças felizes com  X <br></br> quantidade de caixas de sapato possíveis.</p>
+                            <p>Parabéns! Você fará muitas crianças felizes com  X quantidade de caixas de sapato possíveis.</p>
                         </div>
                     </div>
 
@@ -73,9 +73,8 @@ const DoacaoLote = () => {
                                 className={styles["image-preview"]}
                             />
                         )}
-
                         <h2>Resultado: </h2>
-                        <p>Preço Total: R$</p>
+                        <p>Preço: R$</p>
                     </div>
 
                 </div>
