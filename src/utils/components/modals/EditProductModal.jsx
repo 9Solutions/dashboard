@@ -77,7 +77,36 @@ const EditProductModal = ({ product, hiddenState, setReload }) => {
                         "content": base64
                     }).then((response) => {
                         if (response.status === 200) {
-                            formData['urlImagem'] = response.url;
+                            console.log(response)
+                            formData['urlImagem'] = response.data.body.url;
+
+                            if (product.id !== -1) {
+                                putProduto(product.id, formData).then((response) => {
+                                    if (response.status === 200) {
+                                        toast.success('Produto salvo com sucesso');
+                                        setHidden(true);
+                                        setReload(prev => !prev);
+                                    } else {
+                                        toast.error('Erro ao salvar o produto, tente novamente');
+                                    }
+                                }).catch((error) => {
+                                    console.error('Erro ao salvar o produto: ', error);
+                                    toast.error('Erro ao salvar o produto, tente novamente');
+                                })
+                            } else {
+                                postProduto(formData).then((response) => {
+                                    if (response.status === 201) {
+                                        toast.success('Produto salvo com sucesso');
+                                        setHidden(true);
+                                        setReload(prev => !prev);
+                                    } else {
+                                        toast.error('Erro ao salvar o produto, tente novamente');
+                                    }
+                                }).catch((error) => {
+                                    console.error('Erro ao salvar o produto: ', error);
+                                    toast.error('Erro ao salvar o produto, tente novamente');
+                                })
+                            }
                         }
                     });
                 });
@@ -87,33 +116,7 @@ const EditProductModal = ({ product, hiddenState, setReload }) => {
 
 
 
-            if (product.id !== -1) {
-                putProduto(product.id, formData).then((response) => {
-                    if (response.status === 200) {
-                        toast.success('Produto salvo com sucesso');
-                        setHidden(true);
-                        setReload(prev => !prev);
-                    } else {
-                        toast.error('Erro ao salvar o produto, tente novamente');
-                    }
-                }).catch((error) => {
-                    console.error('Erro ao salvar o produto: ', error);
-                    toast.error('Erro ao salvar o produto, tente novamente');
-                })
-            } else {
-                postProduto(formData).then((response) => {
-                    if (response.status === 201) {
-                        toast.success('Produto salvo com sucesso');
-                        setHidden(true);
-                        setReload(prev => !prev);
-                    } else {
-                        toast.error('Erro ao salvar o produto, tente novamente');
-                    }
-                }).catch((error) => {
-                    console.error('Erro ao salvar o produto: ', error);
-                    toast.error('Erro ao salvar o produto, tente novamente');
-                })
-            }
+
         }
     }
 
