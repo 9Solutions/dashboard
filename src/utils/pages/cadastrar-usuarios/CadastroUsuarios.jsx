@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./CadastroUsuarios.module.css";
 import logo_img from "../../assets/logo.png";
@@ -6,14 +6,27 @@ import Navbar from "../../components/navbar/Navbar";
 import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";
 import { toast } from "react-toastify";
-import api from "../../../api"
+import api from "../../../api";
 import LeftBar from "../../components/leftBar/LeftBar";
 
 const CadastroUsuarios = () => {
+  const [donors, setDonors] = useState([]);
+  const permissaoAdmin = "admin";
+
+  useEffect(() => {
+    api
+      .get(`/doadores/usuarios/${permissaoAdmin}`)
+      .then((response) => {
+        setDonors(response.data);
+      })
+      .catch(() => {
+        toast.error("Erro ao carregar os doadores");
+      });
+  }, []);
+
   const emailRef = useRef("");
   const senhaRef = useRef("");
   const confirmarSenhaRef = useRef("");
-  const permissao = 'admin'
   const handleSave = () => {
     const email = emailRef.current.value;
     const senha = senhaRef.current.value;
@@ -22,13 +35,11 @@ const CadastroUsuarios = () => {
     if (senha !== confirmarSenha) {
       toast.error("As senhas não coincidem");
     } else {
-
       api
         .post(`/doadores`, {
           email,
           senha,
-          permissao,
-
+          permissaoAdmin,
         })
         .then(() => {
           toast.success("Cadastro realizado  com sucesso!");
@@ -39,7 +50,7 @@ const CadastroUsuarios = () => {
           );
         });
     }
-};
+  };
 
   const handleInputChange = (event, setStateFunction) => {
     setStateFunction(event.target.value);
@@ -47,12 +58,11 @@ const CadastroUsuarios = () => {
 
   return (
     <>
-      <Navbar page_title="Usuários"/>
-      <LeftBar/>
+      <Navbar page_title="Usuários" />
+      <LeftBar />
 
       <div className={styles["page__container"]}>
         <div className={styles["login__container"]}>
-
           <div>
             <h1 className={styles["login__title"]}>Novo Usuário</h1>
 
@@ -84,6 +94,30 @@ const CadastroUsuarios = () => {
               <Button title="Cadastrar" onClick={handleSave} />
             </form>
           </div>
+        </div>
+      </div>
+      <div className={styles["page__container"]}>
+        <div className={styles["table__container"]}>
+          <h1 className={styles["table__title"]}>Doadores</h1>
+
+          <table className={styles["responsive__table"]}>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Permissão</th>
+              </tr>
+            </thead>
+            <tbody>
+              {donors.map((donor) => (
+                <tr key={donor.id}>
+                  <td>{donor.id}</td>
+                  <td>{donor.email}</td>
+                  <td>{donor.permissao}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </>
