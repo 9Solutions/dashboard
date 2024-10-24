@@ -139,7 +139,8 @@ input[type="file"] {
 .lado-esquerdo p{
     color: green;
     font-weight: bold;
-    font-size: 25px;
+    font-size: 20px;
+    margin-left: 5%;
 }
 
 .div-login .link{
