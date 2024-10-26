@@ -4,7 +4,7 @@ module.exports = function(app) {
     app.use(
         '/java-api',
         createProxyMiddleware({
-            target: 'http://10.18.34.177:8080',
+            target: 'http://10.18.34.86:8080',
             changeOrigin: true,
         })
     );
@@ -12,7 +12,7 @@ module.exports = function(app) {
     app.use(
         '/lambda-services',
         createProxyMiddleware({
-            target: 'https://1cj3hzfx8k.execute-api.us-east-1.amazonaws.com',
+            target: 'https://f9zmnx2q3a.execute-api.us-east-1.amazonaws.com',
             changeOrigin: true,
         })
     );
