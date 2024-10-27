@@ -62,3 +62,51 @@
         width: auto;
     }
 }
+
+.table__container {
+    width: 100%;
+    max-width: 800px; /* Define uma largura máxima */
+    margin: 0 auto; /* Centraliza horizontalmente */
+    padding: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Adiciona uma leve sombra para destaque */
+    background-color: #fff;
+    border-radius: 8px;
+  }
+  
+  .responsive__table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .responsive__table th, .responsive__table td {
+    padding: 8px 16px;
+    text-align: left;
+  }
+  
+  .responsive__table th {
+    background-color: #f4f4f4;
+  }
+  
+  @media (max-width: 600px) {
+    .responsive__table, .responsive__table thead, .responsive__table tbody, .responsive__table th, .responsive__table td, .responsive__table tr {
+      display: block;
+    }
+  
+    .responsive__table tr {
+      margin-bottom: 15px;
+    }
+  
+    .responsive__table td {
+      text-align: right;
+      padding-left: 50%;
+      position: relative;
+    }
+  
+    .responsive__table td::before {
+      content: attr(data-label);
+      position: absolute;
+      left: 0;
+      padding-left: 10px;
+      font-weight: bold;
+    }
+  }
