@@ -110,3 +110,7 @@ export const postPDF = async (pedido) => {
 export const postImage = async (fotoBase64) => {
     return api.post(`/lambda-services/live/upload-image`, fotoBase64);
 }
+
+export const postImport = async (fileConfig) => {
+    return api.post(`/lambda-services/live/imports`, fileConfig);
+}

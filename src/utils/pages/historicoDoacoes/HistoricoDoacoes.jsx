@@ -13,10 +13,11 @@ import {
     getPedidoDetalhado,
     getCaixasEntregar,
     getCaixasMontar,
-    postPDF
+    postPDF, postImport
 } from "../../backend/methods";
-import {base64ToBlob, tranformDate, tranformPhone} from "../../globals";
+import {base64ToBlob, fileToBase64, tranformDate, tranformPhone} from "../../globals";
 import { useSearchParams } from "react-router-dom";
+import {toast} from "react-toastify";
 
 
 const HistoricoDoacoes = () => {
@@ -25,7 +26,6 @@ const HistoricoDoacoes = () => {
     const [doacoes, setDoacoes] = useState([]);
     const [qtdEntrega, setQtdEntrega] = useState([]);
     const [qtdMontar, setQtdMontar] = useState([]);
-    const [selectedFile, setSelectedFile] = useState(null);
 
     const data = searchParams.get('data');
     const status = searchParams.get('status');
@@ -59,46 +59,35 @@ const HistoricoDoacoes = () => {
         }
     }
 
-    const handleFileChange = (event) => {
-        setSelectedFile(event.target.files[0]);
-      };
 
-      const importCSV = () => {
+
+    const importFile = (selectedFile) => {
         if (!selectedFile) {
             alert("Por favor, selecione um arquivo CSV");
             return;
         }
-    
-        const fileExtension = selectedFile.name.split('.').pop().toLowerCase();
-        if (fileExtension !== 'csv') {
-            alert("Por favor, selecione um arquivo no formato CSV.");
-            return;
-        }
-    
-        const formData = new FormData();
-        formData.append('file', selectedFile);
-    
-        fetch('http://localhost:8080/api/import-csv', {
-            method: 'POST',
-            body: formData,
-            headers: {
-            },
-        })
-        .then((response) => {
-            if (response.ok) {
-                return response.text();
-            } else {
-                throw new Error('Falha ao importar o arquivo.');
-            }
-        })
-        .then((data) => {
-            alert('Arquivo CSV importado com sucesso!');
-            console.log('Resposta do servidor:', data);
-        })
-        .catch((error) => {
-            console.error("Erro ao importar o arquivo:", error);
-            alert('Erro ao importar o arquivo.');
+
+        const extension = selectedFile.name.split('.').pop().toLowerCase();
+
+        fileToBase64(selectedFile).then((base64) => {
+            const formData = {
+                file: base64,
+                fileExtension: extension
+            };
+            let loadFile = toast.loading("Importando arquivo...");
+            postImport(formData).then((response) => {
+                toast.update(loadFile, {render: "Arquivo Importado", type: "success", isLoading: false});
+                window.location.reload();
+            }).catch((error) => {
+                console.error("Erro ao importar arquivo: ", error);
+                toast.update(loadFile, {render: "Erro ao importar arquivo", type: "error", isLoading: false});
+            })
         });
+    };
+
+    const handleFileChange = (event) => {
+        let selectedFile = event.target.files[0];
+        importFile(selectedFile);
     };
       
     const loadQtdEntrega = () => {
@@ -189,14 +178,14 @@ const HistoricoDoacoes = () => {
                 <div className={styles["botoes"]}>
                     <input 
                       type="file" 
-                      accept=".csv" 
+                      accept=".xlsx, .txt"
                       onChange={handleFileChange} 
                       style={{ display: 'none' }} 
                       id="upload-csv"
                     />
                     <label htmlFor="upload-csv" className={styles["botao-import"]}>
                         <img src={importPic} alt="" />
-                        Importar CSV
+                        Importar
                     </label>
             
 
