@@ -15,17 +15,18 @@
 .botoes{
     display: flex;
     justify-content: flex-end;
+    align-items: center;
 }
 
 .botao-import{
     color: white;
     background-color: #F79A00;
     border: none;
-    font-size: 17px;
+    font-size: 10px;
     font-weight: 300;
     border-radius: 7px;
     margin-top: 2%;
-    width: 14%;
+    width: 10%;
     height: 4vh;
     display: flex;
     align-items: center;
@@ -36,6 +37,8 @@
 
 .botao-import img{
      margin-right: 10px;
+     height: 15px;
+     width: 15px;
 }
 
 
@@ -52,20 +55,16 @@
     color: white;
     background-color: #F79A00;
     border: none;
-    font-size: 17px;
+    font-size: 10px;
     font-weight: 300;
     border-radius: 7px;
     margin-top: 2%;
-    width: 14%;
+    width: 10%;
     height: 4vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-
-.botao-export:hover {
-    background-color: #b87200;
-  }
 
 
 .relatorio__container{
