@@ -151,10 +151,6 @@ const HistoricoDoacoes = () => {
         }
     };
     
-
-
-
-
     useEffect(() => {
         loadDoacoes();
 
@@ -193,8 +189,6 @@ const HistoricoDoacoes = () => {
                         <img src={exportPic} alt=""/>
                         <option value="" selected={true} disabled={true}>Exportar</option>
                         <option value="csv">CSV</option>
-                        <option value="json">Json</option>
-                        <option value="xml">XML</option>
                         <option value="txt">TXT</option>
                     </select>
 
