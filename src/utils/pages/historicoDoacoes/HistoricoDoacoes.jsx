@@ -13,7 +13,7 @@ import {
     getPedidoDetalhado,
     getCaixasEntregar,
     getCaixasMontar,
-    postPDF, postImport
+    postPDF, postImport, getExportarTxt, getExportar
 } from "../../backend/methods";
 import {base64ToBlob, fileToBase64, tranformDate, tranformPhone} from "../../globals";
 import { useSearchParams } from "react-router-dom";
@@ -30,6 +30,7 @@ const HistoricoDoacoes = () => {
     const data = searchParams.get('data');
     const status = searchParams.get('status');
     const idDoacao = searchParams.get('idDoacao');
+    const {nome} = JSON.parse(sessionStorage.getItem("auth"));
 
     const isSelected = (value) => status === value;
 
@@ -76,11 +77,11 @@ const HistoricoDoacoes = () => {
             };
             let loadFile = toast.loading("Importando arquivo...");
             postImport(formData).then((response) => {
-                toast.update(loadFile, {render: "Arquivo Importado", type: "success", isLoading: false});
+                toast.update(loadFile, {render: "Arquivo Importado", type: "success", isLoading: false, autoClose: true});
                 window.location.reload();
             }).catch((error) => {
                 console.error("Erro ao importar arquivo: ", error);
-                toast.update(loadFile, {render: "Erro ao importar arquivo", type: "error", isLoading: false});
+                toast.update(loadFile, {render: "Erro ao importar arquivo", type: "error", isLoading: false, autoClose: true});
             })
         });
     };
@@ -126,29 +127,28 @@ const HistoricoDoacoes = () => {
         });
     }
 
-    const exportCSV = () => {
-        if (doacoes.length === 0) {
-            alert('Nenhuma doação para exportar.');
-            return;
+    const exportar = (tipo) => {
+
+    
+        if (tipo === 'txt'){
+            getExportarTxt(nome).then((response) => {
+                const blob = new Blob([response.data], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'doacoes.txt';
+                a.click();
+            })
+        }else {
+            getExportar(tipo).then((response) => {
+                const blob = new Blob([response.data], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `doacoes.${tipo}`;
+                a.click();
+            })
         }
-    
-        let csvContent = 'Nº Doação,Doador,Telefone,Status,Data Doação,Valor,Quantidade de Caixas\n';
-    
-        doacoes.forEach((doacao) => {
-            csvContent += `${doacao.id},${doacao.doador.nome || doacao.doador.nomeCompleto},${tranformPhone(doacao.doador.telefone)},${doacao.statusPedido.status},${tranformDate(doacao.dataPedido)},${doacao.valorTotal},${doacao.quantidadeCaixas}\n`;
-        });
-    
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = window.URL.createObjectURL(blob);
-    
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'historico_doacoes.csv');
-    
-        document.body.appendChild(link);
-        link.click();
-    
-        document.body.removeChild(link);
     };
     
 
@@ -187,10 +187,16 @@ const HistoricoDoacoes = () => {
                         <img src={importPic} alt="" />
                         Importar
                     </label>
-            
 
-                    <button className={styles["botao-export"]} onClick={exportCSV}>
-                        <img src={exportPic} alt="" />Exportar CSV</button>
+
+                    <select className={styles["botao-export"]} onChange={e => exportar(e.target.value)}>
+                        <img src={exportPic} alt=""/>
+                        <option value="" selected={true} disabled={true}>Exportar</option>
+                        <option value="csv">CSV</option>
+                        <option value="json">Json</option>
+                        <option value="xml">XML</option>
+                        <option value="txt">TXT</option>
+                    </select>
 
                 </div>
                 <div className={styles["filtro__container"]}>

@@ -103,6 +103,25 @@ export const postFotoEmail = async (foto, id) => {
     });
 }
 
+export const getDoadores = async (permissaoAdmin) => {
+    return api.get(`/java-api/doadores/usuarios/${permissaoAdmin}`);
+}
+
+export const postDoador = async (email,
+                                 senha,
+                                 permissaoAdmin) => {
+    return api.post(`/java-api/doadores`, {email, senha, permissaoAdmin});
+}
+
+export const getExportar = async (tipo) => {
+    // return bytes file for download
+    return api.get(`/java-api/pedidos/exportar?tipo=${tipo}`, { responseType: "blob" });
+}
+
+export const getExportarTxt = async (nomeAdmin) => {
+    return api.get(`/java-api/pedidos/exportar-txt?nomeAdmin=${nomeAdmin}`, { responseType: "blob" });
+}
+
 export const postPDF = async (pedido) => {
     return api.post(`/lambda-services/live/generate-pdf`, pedido);
 }
@@ -114,3 +133,4 @@ export const postImage = async (fotoBase64) => {
 export const postImport = async (fileConfig) => {
     return api.post(`/lambda-services/live/imports`, fileConfig);
 }
+

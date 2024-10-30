@@ -6,22 +6,21 @@ import Navbar from "../../components/navbar/Navbar";
 import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";
 import { toast } from "react-toastify";
-import api from "../../../api";
 import LeftBar from "../../components/leftBar/LeftBar";
+import {getDoadores, postDoador} from "../../backend/methods";
 
 const CadastroUsuarios = () => {
   const [donors, setDonors] = useState([]);
   const permissaoAdmin = "admin";
 
+
+
   useEffect(() => {
-    api
-      .get(`/doadores/usuarios/${permissaoAdmin}`)
-      .then((response) => {
-        setDonors(response.data);
-      })
-      .catch(() => {
-        toast.error("Erro ao carregar os doadores");
-      });
+    getDoadores(permissaoAdmin).then((response) => {
+      setDonors(response.data);
+    }).catch(() => {
+      toast.error("Erro ao carregar os doadores");
+    });
   }, []);
 
   const emailRef = useRef("");
@@ -35,20 +34,13 @@ const CadastroUsuarios = () => {
     if (senha !== confirmarSenha) {
       toast.error("As senhas não coincidem");
     } else {
-      api
-        .post(`/doadores`, {
-          email,
-          senha,
-          permissaoAdmin,
-        })
-        .then(() => {
-          toast.success("Cadastro realizado  com sucesso!");
-        })
-        .catch(() => {
-          toast.error(
-            "Ocorreu um erro ao salvar os dados, por favor, tente novamente."
-          );
-        });
+      postDoador(email, senha, permissaoAdmin).then(() => {
+        toast.success("Cadastro realizado com sucesso!");
+      }).catch(() => {
+        toast.error("Erro ao salvar os dados, por favor, tente novamente.");
+      })
+
+
     }
   };
 
