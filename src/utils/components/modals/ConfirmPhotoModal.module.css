@@ -51,9 +51,33 @@
 .form__confirm_button{
     background-color: var(--primary-color);
     color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form__confirm_button div {
+    width: 15px;
+    height: 15px;
+
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-top: 2px solid #fff;
+    border-radius: 50%;
+
+    animation: spin 1s linear infinite;
 }
 
 .form__confirm_button:hover{
     background-color: var(--primary-color-dark);
     color: white;
+}
+
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

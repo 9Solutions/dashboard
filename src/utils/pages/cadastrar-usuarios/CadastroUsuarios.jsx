@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./CadastroUsuarios.module.css";
 import logo_img from "../../assets/logo.png";
@@ -6,41 +6,43 @@ import Navbar from "../../components/navbar/Navbar";
 import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";
 import { toast } from "react-toastify";
-import api from "../../../api";
 import LeftBar from "../../components/leftBar/LeftBar";
+import {getDoadores, postDoador} from "../../backend/methods";
 
 const CadastroUsuarios = () => {
-  const nomeRef = useRef("");
+  const [donors, setDonors] = useState([]);
+  const permissaoAdmin = "admin";
+
+  useEffect(() => {
+    getDoadores(permissaoAdmin).then((response) => {
+      setDonors(response.data);
+    }).catch(() => {
+      toast.error("Erro ao carregar os doadores");
+    });
+  }, []);
+
   const emailRef = useRef("");
   const senhaRef = useRef("");
   const confirmarSenhaRef = useRef("");
-  const permissaoRef = useRef("");
   const handleSave = () => {
-    const nome = nomeRef.current.value;
     const email = emailRef.current.value;
     const senha = senhaRef.current.value;
     const confirmarSenha = confirmarSenhaRef.current.value;
-    const permissao = permissaoRef.current.value
 
     if (senha !== confirmarSenha) {
       toast.error("As senhas não coincidem");
     } else {
-      api
-        .post(`/doadores`, {
-          nome,
-          email,
-          senha,
-          permissao,
-        })
-        .then(() => {
-          toast.success("Cadastro realizado  com sucesso!");
-        })
-        .catch(() => {
-          toast.error(
-            "Ocorreu um erro ao salvar os dados, por favor, tente novamente."
-          );
-        });
+      postDoador(email, senha, permissaoAdmin).then(() => {
+        toast.success("Cadastro realizado com sucesso!");
+      }).catch(() => {
+        toast.error("Erro ao salvar os dados, por favor, tente novamente.");
+      })
+
     }
+  };
+
+  const handleInputChange = (event, setStateFunction) => {
+    setStateFunction(event.target.value);
   };
 
   return (
@@ -57,13 +59,6 @@ const CadastroUsuarios = () => {
               className={styles["login__form"]}
               onSubmit={(e) => e.preventDefault()}
             >
-              <Input
-                title="Nome"
-                type="text"
-                placeholder="Digite seu nome"
-                inputRef={nomeRef}
-                required={true}
-              />
               <Input
                 title="E-mail"
                 type="email"
@@ -85,16 +80,33 @@ const CadastroUsuarios = () => {
                 inputRef={confirmarSenhaRef}
                 required={true}
               />
-              <Input
-                title="Permissão"
-                type="text"
-                placeholder="Digite o nivel de permissão"
-                inputRef={permissaoRef}
-                required={true}
-              />
               <Button title="Cadastrar" onClick={handleSave} />
             </form>
           </div>
+        </div>
+      </div>
+      <div className={styles["page__container"]}>
+        <div className={styles["table__container"]}>
+          <h1 className={styles["table__title"]}>Doadores</h1>
+
+          <table className={styles["responsive__table"]}>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Permissão</th>
+              </tr>
+            </thead>
+            <tbody>
+              {donors.map((donor) => (
+                <tr key={donor.id}>
+                  <td>{donor.id}</td>
+                  <td>{donor.email}</td>
+                  <td>{donor.permissao}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef, useState} from "react";
 import Button from "../button/Button";
 import style from "./ConfirmPhotoModal.module.css";
 import {postFotoEmail} from "../../backend/methods";
@@ -6,14 +6,21 @@ import {base64ToBlob} from "../../globals";
 
 
 const ConfirmPhotoModal = ({setLoad, setEnableFoto, image, setImage, idPedido}) => {
+    const [isSend, setIsSend] = useState(false);
+
     const sendPhotoToEmail = () => {
         const parts = image.split(';base64,');
-        postFotoEmail(base64ToBlob(parts[1], "image/jpeg"), idPedido.current).then((response) => {
-            setLoad(false);
-            setEnableFoto(false);
-        }).catch((error) => {
-            console.error("Erro ao enviar a foto: ", error);
-        });
+
+        if (!isSend) {
+            setIsSend(true);
+            postFotoEmail(base64ToBlob(parts[1], "image/jpeg"), idPedido.current).then((response) => {
+                setLoad(false);
+                setEnableFoto(false); 
+                setIsSend(false);
+            }).catch((error) => {
+                console.error("Erro ao enviar a foto: ", error);
+            });
+        }
     }
 
     const onCancel = () => {
@@ -31,7 +38,9 @@ const ConfirmPhotoModal = ({setLoad, setEnableFoto, image, setImage, idPedido}) 
                 <img src={image}/>
                 <div className={style["modal-buttons__container"]}>
                     <Button onClick={onCancel}  title={'Tentar Novamente'}/>
-                    <Button onClick={sendPhotoToEmail} className={style['form__confirm_button']} title={'Confirmar'}/>
+
+                    <Button onClick={sendPhotoToEmail}
+                            className={style['form__confirm_button']} title={isSend ? <div></div> : 'Confirmar'}/>
                 </div>
             </div>
         </div>

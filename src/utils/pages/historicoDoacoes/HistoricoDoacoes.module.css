@@ -12,6 +12,61 @@
 
 }
 
+.botoes{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.botao-import{
+    color: white;
+    background-color: #F79A00;
+    border: none;
+    font-size: 10px;
+    font-weight: 300;
+    border-radius: 7px;
+    margin-top: 2%;
+    width: 10%;
+    height: 4vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.botao-import img{
+     margin-right: 10px;
+     height: 15px;
+     width: 15px;
+}
+
+
+.botao-export img{
+    margin-right: 10px;
+}
+
+.botao-import:hover {
+    background-color: #b87200;
+  }
+
+.botao-export{
+    cursor: pointer;
+    color: white;
+    background-color: #F79A00;
+    border: none;
+    font-size: 10px;
+    font-weight: 300;
+    border-radius: 7px;
+    margin-top: 2%;
+    width: 10%;
+    height: 4vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
 .relatorio__container{
     background-color: #fff;
 
@@ -166,4 +221,17 @@
 
 .download {
     cursor: pointer;
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

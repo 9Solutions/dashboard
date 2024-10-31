@@ -85,10 +85,21 @@ const QrCode = () => {
                     toast.success("Caixa entregue com sucesso");
                     setEnableFoto(true);
                 }
-
+                let id = toast.loading("Atualizando Status da Caixa");
                 patchCaixaStatus(caixa.id, proximoStatus).then(() => {
-                    toast.success("Status da caixa atualizado com sucesso");
+                    toast.update(id, {
+                        render: "Status da Caixa Atualizado",
+                        type: "success",
+                        isLoading: false,
+                        autoClose: 2000
+                    });
                 }).catch((error) => {
+                    toast.update(id, {
+                        render: "Erro ao atualizar o status da caixa",
+                        type: "error",
+                        isLoading: false,
+                        autoClose: 2000
+                    });
                     console.error("Erro ao atualizar o status da caixa: ", error);
                 })
             }
