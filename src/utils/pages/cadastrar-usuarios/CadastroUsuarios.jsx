@@ -13,8 +13,6 @@ const CadastroUsuarios = () => {
   const [donors, setDonors] = useState([]);
   const permissaoAdmin = "admin";
 
-
-
   useEffect(() => {
     getDoadores(permissaoAdmin).then((response) => {
       setDonors(response.data);
@@ -39,7 +37,6 @@ const CadastroUsuarios = () => {
       }).catch(() => {
         toast.error("Erro ao salvar os dados, por favor, tente novamente.");
       })
-
 
     }
   };
