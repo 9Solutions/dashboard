@@ -13,11 +13,13 @@ import {
     getPedidoDetalhado,
     getCaixasEntregar,
     getCaixasMontar,
-    postPDF, postImport, getExportarTxt, getExportar
+    postPDF, postImport, getExportarTxt, getExportarCsv,
+    postImportTxt
 } from "../../backend/methods";
 import {base64ToBlob, fileToBase64, tranformDate, tranformPhone} from "../../globals";
 import { useSearchParams } from "react-router-dom";
 import {toast} from "react-toastify";
+import dayjs from 'dayjs'
 
 
 const HistoricoDoacoes = () => {
@@ -69,21 +71,37 @@ const HistoricoDoacoes = () => {
         }
 
         const extension = selectedFile.name.split('.').pop().toLowerCase();
-
-        fileToBase64(selectedFile).then((base64) => {
-            const formData = {
-                file: base64,
-                fileExtension: extension
-            };
-            let loadFile = toast.loading("Importando arquivo...");
-            postImport(formData).then((response) => {
-                toast.update(loadFile, {render: "Arquivo Importado", type: "success", isLoading: false, autoClose: true});
-                window.location.reload();
-            }).catch((error) => {
-                console.error("Erro ao importar arquivo: ", error);
+        let loadFile;
+        if(extension === 'xlsx') {
+            fileToBase64(selectedFile).then((base64) => {
+                const formData = {
+                    file: base64,
+                    fileExtension: extension
+                };
+                loadFile = toast.loading("Importando arquivo...");
+                postImport(formData).then((response) => {
+                    toast.update(loadFile, {render: "Arquivo Importado", type: "success", isLoading: false, autoClose: true});
+                    window.location.reload();
+                }).catch((error) => {
+                    console.error("Erro ao importar arquivo: ", error);
+                    toast.update(loadFile, {render: "Erro ao importar arquivo", type: "error", isLoading: false, autoClose: true});
+                })
+            });
+        } else if(extension === 'txt') {
+            loadFile = toast.loading("Importando arquivo...");
+            postImportTxt(selectedFile).then(
+                (response) => {
+                    toast.update(loadFile, {render: "Arquivo Importado", type: "success", isLoading: false, autoClose: true});
+                    console.log(response.data)
+                    window.location.reload();
+                }
+            ).catch(e => {
+                console.log(e)
                 toast.update(loadFile, {render: "Erro ao importar arquivo", type: "error", isLoading: false, autoClose: true});
             })
-        });
+        } else {
+            toast.update(loadFile, {render: "Arquivo inválido, o formato deve ser: xlsx ou txt", type: "error", isLoading: false, autoClose: true});
+        }
     };
 
     const handleFileChange = (event) => {
@@ -128,25 +146,27 @@ const HistoricoDoacoes = () => {
     }
 
     const exportar = (tipo) => {
-
-    
+        let loadFile = toast.loading("Exportando arquivo...");
+        let nomeArquivo = `pedidos-${dayjs().format('YYYYMMDD-HHmm')}`
         if (tipo === 'txt'){
             getExportarTxt(nome).then((response) => {
                 const blob = new Blob([response.data], { type: 'text/plain' });
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'doacoes.txt';
+                a.download = nomeArquivo + '.txt';
                 a.click();
+                toast.update(loadFile, {render: "Arquivo Exportado", type: "success", isLoading: false, autoClose: true});
             })
-        }else {
-            getExportar(tipo).then((response) => {
+        } else {
+            getExportarCsv(tipo).then((response) => {
                 const blob = new Blob([response.data], { type: 'text/plain' });
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `doacoes.${tipo}`;
+                a.download = nomeArquivo + '.csv';
                 a.click();
+                toast.update(loadFile, {render: "Arquivo Exportado", type: "success", isLoading: false, autoClose: true});
             })
         }
     };
