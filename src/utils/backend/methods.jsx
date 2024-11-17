@@ -110,12 +110,19 @@ export const getDoadores = async (permissaoAdmin) => {
 export const postDoador = async (email,
                                  senha,
                                  permissaoAdmin) => {
-    return api.post(`/java-api/doadores`, {email, senha, permissaoAdmin});
+    return api.post(`/java-api/doadores`, {
+        nomeCompleto: "User Default",
+        identificador: "30893795038",
+        email,
+        telefone: "11925566157",
+        senha,
+        permissao: permissaoAdmin
+    });
 }
 
-export const getExportar = async (tipo) => {
+export const getExportarCsv = async (tipo) => {
     // return bytes file for download
-    return api.get(`/java-api/pedidos/exportar?tipo=${tipo}`, { responseType: "blob" });
+    return api.get(`/java-api/pedidos/exportar-csv`, { responseType: "blob" });
 }
 
 export const getExportarTxt = async (nomeAdmin) => {
@@ -132,5 +139,17 @@ export const postImage = async (fotoBase64) => {
 
 export const postImport = async (fileConfig) => {
     return api.post(`/lambda-services/live/imports`, fileConfig);
+}
+
+export const postImportTxt = async (file) => {
+    return api.post(`java-api/pedidos/import`, {
+            file
+        },
+        {
+            headers: {
+            'Content-Type': 'multipart/form-data'
+            }
+        }
+    )
 }
 
