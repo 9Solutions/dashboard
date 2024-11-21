@@ -2,7 +2,7 @@ import axios from "axios";
 
 const { token } = JSON.parse(sessionStorage.getItem("auth")) || {};
 const api = axios.create({
-    baseURL: "http://10.0.0.164:8080",
+    //baseURL: "http://10.0.0.164:8080",
     headers: {
         Authorization: token ? `Bearer ${token}` : null
     }
