@@ -3,6 +3,7 @@ import styles from "./DoacaoLote.module.css";
 import caixaCarrinho from "../../assets/carrinho.png";
 import Navbar from "../../components/navbar/Navbar";
 import LeftBar from "../../components/leftBar/LeftBar";
+import { NumericFormat } from "react-number-format";
 
 const DoacaoLote = () => {
     const [imagePreview, setImagePreview] = useState(null);
@@ -17,10 +18,9 @@ const DoacaoLote = () => {
         return 0;
     };
 
-    const handleDoacaoChange = (event) => {
-        setDoacao(event.target.value);
+    const handleDoacaoChange = (values) => {
+        setDoacao(values.floatValue);
     };
-
 
 
     const handleImageUpload = (event) => {
@@ -48,21 +48,35 @@ const DoacaoLote = () => {
                     <div className={styles["lado-esquerdo"]}>
                         <label className={styles["label-lote"]} htmlFor="identificador">
                             Insira o valor que será doado:
-                        </label><br></br>
-                        <input
-                            className={styles['input-doacao-lote']}
-                            type="text"
-                            placeholder="R$1000"
-                            onChange={handleDoacaoChange} 
+                        </label><br/>
+                        <NumericFormat
+                            thousandSeparator={false}
+                            decimalSeparator=","
+                            decimalScale={2} // Limit to 2 decimal places
+                            allowNegative={false} // Optionally allow negatives
+                            placeholder="1000"
+                            onValueChange={handleDoacaoChange}
+                            className={styles["input-doacao-lote"]}
                         /><br></br>
+                        <label className={styles["label-lote"]}>
+                            Quantidade de Caixas <br></br>
+                        </label>
+                        <input
+                            className={styles["input-doacao-lote"]}
+                            type="number"
+                            value={calcularCaixas(doacao)}
+                            min={1}
+                            /><br></br>
+
                         <label className={styles["label-lote"]}>
                             Escreva uma cartinha para as crianças: <br></br>
                         </label>
 
-                        <input className={styles['input-doacao-lote']} type="text" className={styles["cartinha"]} /><br></br>
+                        <input className={styles['input-doacao-lote']} type="text"
+                               className={styles["cartinha"]}/><br></br>
 
                         <div className={styles["caixa-carrinho"]}>
-                            <img src={caixaCarrinho} alt="" />
+                            <img src={caixaCarrinho} alt=""/>
                             <p>
                                 Parabéns Doador! Você fará muitas crianças felizes com {calcularCaixas(doacao)}{" "}
                                 caixas de sapato possíveis.

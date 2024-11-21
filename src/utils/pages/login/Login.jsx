@@ -14,9 +14,24 @@ const Login = () => {
     const emailRef = useRef(null);
     const senhaRef = useRef(null);
 
+    const isMobile = () => {
+        return navigator.userAgent.match(/Android/i)
+            || navigator.userAgent.match(/webOS/i)
+            || navigator.userAgent.match(/iPhone/i)
+            || navigator.userAgent.match(/iPad/i)
+            || navigator.userAgent.match(/iPod/i)
+            || navigator.userAgent.match(/BlackBerry/i)
+            || navigator.userAgent.match(/Windows Phone/i)
+    }
+
     useEffect(() => {
         if (sessionStorage.getItem("auth") !== null) {
-            navigate("/historico-doacoes");
+            if(isMobile()){
+                window.location.href = "/qr-code";
+            }
+            else {
+                window.location.href = "/historico-doacoes";
+            }
         }
     }
     , [navigate]);
@@ -44,24 +59,12 @@ const Login = () => {
 
 
                 //Verificar se é smartphone
-                if( navigator.userAgent.match(/Android/i)
-                    || navigator.userAgent.match(/webOS/i)
-                    || navigator.userAgent.match(/iPhone/i)
-                    || navigator.userAgent.match(/iPad/i)
-                    || navigator.userAgent.match(/iPod/i)
-                    || navigator.userAgent.match(/BlackBerry/i)
-                    || navigator.userAgent.match(/Windows Phone/i)
-                ){
+                if(isMobile()){
                     window.location.href = "/qr-code";
                 }
                 else {
                     window.location.href = "/historico-doacoes";
                 }
-
-
-
-
-
 
             })
             .catch((error) => {
