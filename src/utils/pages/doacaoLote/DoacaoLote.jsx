@@ -72,8 +72,7 @@ const DoacaoLote = () => {
                             Escreva uma cartinha para as crianças: <br></br>
                         </label>
 
-                        <input className={styles['input-doacao-lote']} type="text"
-                               className={styles["cartinha"]}/><br></br>
+                        <input className={styles['input-doacao-lote']} type="text"/><br></br>
 
                         <div className={styles["caixa-carrinho"]}>
                             <img src={caixaCarrinho} alt=""/>

@@ -1,0 +1,78 @@
+name: Build dashboard application for EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Atualização do código
+      uses: actions/checkout@v2
+
+    - name: Versão do node
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+    
+    - name: Gerar artefato da aplicação
+      uses: actions/upload-artifact@v4
+      with:
+        name: aplicacao
+        path: ./
+
+    - name: Gerar artefato do Docker
+      uses: actions/upload-artifact@v4
+      with:
+        name: docker-scripts
+        path: .github/scripts
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Recuperar arquivos da aplicacao
+      uses: actions/download-artifact@v4
+      with:
+        name: aplicacao
+        path: ./
+    
+    - name: Recueprar scripts docker
+      uses: actions/download-artifact@v4
+       with:
+        name: docker-scripts
+        path: ./
+    
+    - name: Enviar para server-dashboard-1
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.IP_DASHBOARD_1 }}
+        username: ubuntu
+        key: ${{ secrets.ACCESS_WEBSERVER_KEY }}
+        source: "./*"
+        target: "/home/ubuntu/dashboard"
+    
+    - name: Enviar para server-dashboard-2
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.IP_DASHBOARD_2 }}
+        username: ubuntu
+        key: ${{ secrets.ACCESS_WEBSERVER_KEY }}
+        source: "./*"
+        target: "/home/ubuntu/dashboard"
+
+    - name: Criar arquivo.pme
+      id: geracao-arquivo-pem
+      run: |
+        echo "${{secrets.ACCESS_WEBSERVER_KEY}}" >> $HOME/deploy-key.pem
+        chmod 400 $HOME/deploy-key.pem
+
+    - name: Conectar dashboard 1
+      run: |
+        ssh -T -o StrictHostKeyChecking=no -i $HOME/deploy-key.pem ubuntu@${{secrets.IP_DASHBOARD_1}} << 'EOF'
+          cd ./dashboard
+          sudo docker-compose -f docker-compose.yml up -d --build && sudo docker restart dashboard-container
+        EOF 

@@ -178,7 +178,7 @@ const HistoricoDoacoes = () => {
 
         loadQtdMontar();
 
-    }, [data, status, idDoacao, searchParams.size]);
+    });
 
     return (
         <div style={{ display: "flex", alignItems: 'center', flexDirection: "column" }}>

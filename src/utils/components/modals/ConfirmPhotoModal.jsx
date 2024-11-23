@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {useState} from "react";
 import Button from "../button/Button";
 import style from "./ConfirmPhotoModal.module.css";
 import {postFotoEmail} from "../../backend/methods";
@@ -35,7 +35,7 @@ const ConfirmPhotoModal = ({setLoad, setEnableFoto, image, setImage, idPedido}) 
                     <h2>Confirme a Foto!</h2>
                     <h4>Por favor, verifique se todos os rostos foram devidamente borrados.</h4>
                 </div>
-                <img src={image}/>
+                <img src={image} alt="Foto da entrega"/>
                 <div className={style["modal-buttons__container"]}>
                     <Button onClick={onCancel}  title={'Tentar Novamente'}/>
 

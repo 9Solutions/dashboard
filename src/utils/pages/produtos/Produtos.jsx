@@ -5,7 +5,6 @@ import styles from "./Produtos.module.css";
 import {getProdutos} from "../../backend/methods"
 import { useEffect, useState } from "react";
 import EditProductContainer from "../../components/editProductContainer/EditProductContainer";
-import {toast} from "react-toastify";
 
 const Produtos = () => {
     const [produtos, setProdutos] = useState([]);
