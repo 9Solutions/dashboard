@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dashboard-container
+    ports:
+      - "443:3000"
+    restart: unless-stopped
