@@ -59,6 +59,11 @@
     border: 2px solid var(--primary-color);
 }
 
+.img_login {
+    width: 10vh;
+    height: 10vh;
+}
+
 @media (max-width: 600px) {
     .left__panel {
         display: none;

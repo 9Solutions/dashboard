@@ -76,7 +76,7 @@ const Login = () => {
     return (
         <>
             <div className={styles["page__container"]}>
-                <div className={styles["left__panel"]}><img src={logo_img} alt="Logo do Projeto Caixa de Sapato"></img></div>
+                <div className={styles["left__panel"]}><img src={logo_img} alt="Logo do Projeto Caixa de Sapato" className={styles["img_login"]}></img></div>
                 <div className={styles["login__container"]}>
                     <Navbar page_title="Acesso a Dashboard" isMinimal={true}/>
 
