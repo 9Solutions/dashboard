@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import style from "./EditProductContainer.module.css";
-import Button from "../button/Button";
 import EditProductModal from "../modals/EditProductModal";
 import {getCategoriasFiltradas} from "../../backend/methods";
 
@@ -33,7 +32,7 @@ const EditProductContainer = ({data, containerHiddenState, setReload, estagio}) 
 
     useEffect(() => {
         loadCategories();
-    }, [estagio]);
+    });
 
     const openEditProductModal = (product) => {
         setEditProductModalisHidden(false);

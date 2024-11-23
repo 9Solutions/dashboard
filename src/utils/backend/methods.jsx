@@ -1,9 +1,7 @@
 import axios from "axios";
 
-const endpoint = process.env.REACT_APP_BACKEND_ENDPOINT;
 const { token } = JSON.parse(sessionStorage.getItem("auth")) || {};
 const api = axios.create({
-    //zzzbaseURL: endpoint,
     headers: {
         Authorization: token ? `Bearer ${token}` : null
     }

@@ -3,7 +3,6 @@ import QrFrame from "../../assets/qr-frame.svg";
 import QrScanner from "qr-scanner";
 import style from "./QrCode.module.css";
 import { toast } from "react-toastify";
-import LoadModal from "../../components/modals/LoadModal";
 import {getStatusCaixas, patchCaixaStatus, getCaixaByQrCodeToken, postFoto} from "../../backend/methods";
 import {base64ToBlob} from "../../globals";
 import ConfirmPhotoModal from "../../components/modals/ConfirmPhotoModal";
@@ -110,7 +109,7 @@ const QrCode = () => {
             updateCaixaStatus(caixa);
             setCaixa(undefined);
         }
-    }, [caixa]);
+    }, [caixa, statusCaixas]);
 
     useEffect(() => {
         const initializeScanner = async () => {
@@ -144,10 +143,12 @@ const QrCode = () => {
         // 🧹 Clean up on unmount.
         // 🚨 This removes the QR Scanner from rendering and using camera when it is closed or removed from the UI.
         return () => {
+            /* eslint-disable-next-line */
             if (!videoEl?.current) {
                 scanner?.current?.stop();
             }
         };
+        /* eslint-disable-next-line */
     }, []);
 
     // ❌ If "camera" is not allowed in browser permissions, show an alert.

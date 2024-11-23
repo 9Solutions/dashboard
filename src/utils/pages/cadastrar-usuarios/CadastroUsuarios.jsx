@@ -1,7 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import styles from "./CadastroUsuarios.module.css";
-import logo_img from "../../assets/logo.png";
 import Navbar from "../../components/navbar/Navbar";
 import Input from "../../components/input/Input";
 import Button from "../../components/button/Button";
@@ -41,9 +39,9 @@ const CadastroUsuarios = () => {
     }
   };
 
-  const handleInputChange = (event, setStateFunction) => {
-    setStateFunction(event.target.value);
-  };
+  // const handleInputChange = (event, setStateFunction) => {
+  //   setStateFunction(event.target.value);
+  // };
 
   return (
     <>
