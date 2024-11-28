@@ -74,6 +74,7 @@ jobs:
       run: |
         ssh -T -o StrictHostKeyChecking=no -i $HOME/deploy-key.pem ubuntu@${{secrets.IP_DASHBOARD_1}} << 'EOF'
           cd ./dashboard
+          sudo docker-compose down
           sudo docker-compose -f docker-compose.yml up -d --build
         EOF
 
@@ -81,5 +82,6 @@ jobs:
       run: |
         ssh -T -o StrictHostKeyChecking=no -i $HOME/deploy-key.pem ubuntu@${{secrets.IP_DASHBOARD_2}} << 'EOF'
           cd ./dashboard
+          sudo docker-compose down
           sudo docker-compose -f docker-compose.yml up -d --build
         EOF
