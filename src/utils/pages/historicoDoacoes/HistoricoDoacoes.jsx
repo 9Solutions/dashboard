@@ -177,8 +177,8 @@ const HistoricoDoacoes = () => {
         loadQtdEntrega();
 
         loadQtdMontar();
-
-    });
+        // eslint-disable-next-line
+    }, []);
 
     return (
         <div style={{ display: "flex", alignItems: 'center', flexDirection: "column" }}>
