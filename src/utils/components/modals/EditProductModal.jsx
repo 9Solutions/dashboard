@@ -45,6 +45,7 @@ const EditProductModal = ({ product, hiddenState, setReload }) => {
     useEffect(() => {
         loadCategories();
         loadAgeLimits();
+        //eslint-disable-next-line
     }, []);
 
     useEffect(() => {
@@ -53,7 +54,8 @@ const EditProductModal = ({ product, hiddenState, setReload }) => {
         setProductCategory(product.categoria.id);
         setProductAgeLimit(product.faixaEtaria.id);
         setProductGender(product.genero);
-    }, [product]);
+        //eslint-disable-next-line
+    }, []);
 
     const handleSave = () => {
         if (productName === '' || productPrice === '' || productCategory === '-1' || productAgeLimit === '-1' || productGender === '-1') {

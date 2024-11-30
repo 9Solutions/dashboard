@@ -32,7 +32,8 @@ const EditProductContainer = ({data, containerHiddenState, setReload, estagio}) 
 
     useEffect(() => {
         loadCategories();
-    });
+        //eslint-disable-next-line
+    }, []);
 
     const openEditProductModal = (product) => {
         setEditProductModalisHidden(false);
