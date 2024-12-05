@@ -8,8 +8,8 @@ const api = axios.create({
 });
 
 export const login = async (email, senha) => {
-    if(email.length === 0 || senha.length === 0) return;
-    return api.post(`/java-api/doadores/login`, {"email": email, "senha": senha});
+    if (email.length === 0 || senha.length === 0) return;
+    return api.post(`/java-api/doadores/login`, { "email": email, "senha": senha });
 }
 
 export const logout = () => {
@@ -106,8 +106,8 @@ export const getDoadores = async (permissaoAdmin) => {
 }
 
 export const postDoador = async (email,
-                                 senha,
-                                 permissaoAdmin) => {
+    senha,
+    permissaoAdmin) => {
     return api.post(`/java-api/doadores`, {
         nomeCompleto: "User Default",
         identificador: "30893795038",
@@ -117,7 +117,21 @@ export const postDoador = async (email,
         permissao: permissaoAdmin
     });
 }
-
+export const postDoadorLote = async (
+    nomeCompleto,
+    email,
+    telefone,
+    senha,
+    permissaoAdmin) => {
+    return api.post(`/java-api/doadores`, {
+        nomeCompleto,
+        identificador: "30893795038",
+        email,
+        telefone,
+        senha,
+        permissao: permissaoAdmin
+    });
+}
 export const getExportarCsv = async (tipo) => {
     // return bytes file for download
     return api.get(`/java-api/pedidos/exportar-csv`, { responseType: "blob" });
@@ -141,13 +155,20 @@ export const postImport = async (fileConfig) => {
 
 export const postImportTxt = async (file) => {
     return api.post(`java-api/pedidos/import`, {
-            file
-        },
+        file
+    },
         {
             headers: {
-            'Content-Type': 'multipart/form-data'
+                'Content-Type': 'multipart/form-data'
             }
         }
     )
 }
 
+export const postPedido = async (payload) => {
+    return api.post('/java-api/pedidos', payload)
+}
+
+export const postCaixa = async (payload) => {
+    return api.post('/java-api/caixas', payload)
+}
